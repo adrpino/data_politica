@@ -244,17 +244,18 @@ con <- dbConnect(MySQL(),
 		top_tweeters[,3]<- factor(top_tweeters[,1],as.character(top_tweeters[,1]))
 
 		# Data on the top 10 mentioned by party
-		ggplot(top_tweeters, aes(x = top_tweeters[,3], y = top_tweeters[,2])) +
-		 geom_bar(stat = "identity",fill=parties_ggcolor[i],position="dodge") +
-		 theme(axis.text.x=element_text(angle=90,hjust=1) ) +
-		 scale_x_discrete(name="") + 
-		 ggtitle(paste0("Top 10 tuiteros de @",parties[i] ) ) +
-		 theme(plot.title =element_text( size=24) ) +
-		 theme(axis.text = element_text(size =16) ) +
-		 scale_y_continuous(name="")
+		graf <- ggplot(top_tweeters, aes(x = top_tweeters[,3], y = top_tweeters[,2])) +
+		     geom_bar(stat = "identity",fill=parties_ggcolor[i],position="dodge") +
+		     theme(axis.text.x=element_text(angle=90,hjust=1) ) +
+		     scale_x_discrete(name="") + 
+		     ggtitle(paste0("Top 10 tuiteros de @",parties[i] ) ) +
+		     theme(plot.title =element_text( size=24) ) +
+		     theme(axis.text = element_text(size =16) ) +
+		     scale_y_continuous(name="")
+		     
 		ggsave(filename=
-		paste0("./data/top_", gsub("-","_",Sys.Date()-1), "_", parties[i],".png"),
-		dpi=310)
+		    paste0("./data/top_", gsub("-","_",Sys.Date()-1), "_", parties[i],".png"),
+		    plot = graf, dpi=310)
 		dev.off()
 	}
 	
@@ -304,14 +305,12 @@ con <- dbConnect(MySQL(),
 		min_week <- min(data_aggr,na.rm=T)
 		
         png(paste0("./data/graph_",
-        gsub("-","_",Sys.Date()-1), "_all_week" ,".png"),
-		width=900, height=600)
-		plot(data_aggr,
-    	main= paste0("Menciones de la semana","     @twt_partidos"),
-	    cex.main=2.8, cex.lab = 2, cex.axis=1.8, lwd=6, 
-	    ylim=c(0,max_week),
-    	col = parties_color,
-    	xlab=NULL )
+        	gsub("-","_",Sys.Date()-1), "_all_week" ,".png"), width=900, height=600)
+	plot(data_aggr, main= paste0("Menciones de la semana","     @twt_partidos"),
+		cex.main=2.8, cex.lab = 2, cex.axis=1.8, lwd=6, 
+		ylim=c(0,max_week),
+    		col = parties_color,
+    		xlab=NULL )
     	dev.off()
     }
     
@@ -361,7 +360,7 @@ con <- dbConnect(MySQL(),
     
     # Paths to word clouds
     for (i in 1:length(parties)) {
-	    file_cloud <- paste0("cloud_", gsub("-","_",Sys.Date()-1), "_", parties[i],".png")
+	file_cloud <- paste0("cloud_", gsub("-","_",Sys.Date()-1), "_", parties[i],".png")
     	path_cloud <- paste0(path, "/", file_cloud)
         write.table(path_cloud,file="file_to_upload", 
         	row.names=F,col.names=F,append=TRUE, eol="\n", quote=F)
