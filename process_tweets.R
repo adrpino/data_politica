@@ -190,10 +190,17 @@ con <- dbConnect(MySQL(),
 
 		cat("Doing wordclouds...","\n")
 		
+		# If too many mentions, take only the top 200:
+		if (dim(tmp)[1]>200) {
+			tmp2 = tmp[1:200,]
+		} else {
+			tmp2 = tmp
+		}
+		
 		# Word cloud
 		title1 = paste0("Términos asociados con ", "@",parties[i],"\n")
-		title2 = paste0("Frecuencias entre ",as.character(tmp[60,2]),
-		" y ",as.character(tmp[1,2]),"\n")
+		title2 = paste0("Frecuencias entre ",as.character(tmp2[dim(tmp2)[1],2]),
+		" y ",as.character(tmp2[1,2]),"\n")
 		title3 = "@twt_partidos"
 		
 		png(paste0("./data/cloud_", gsub("-","_",Sys.Date()-1), "_", parties[i],".png"),520,520)
@@ -201,11 +208,10 @@ con <- dbConnect(MySQL(),
 			par(mar=rep(0,4))
 			plot.new()
 			col = brewer.pal(8,"BrBG")
-	#		text(x=0.5,y=0.5,paste0("Términos asociados con ", "@",parties[i]),cex=1.4)
 			text(x=0.5,y=0.5,paste0(title1,title2,title3),cex=1.5)
 			wordcloud( tmp[,1], tmp[,2], 
 			scale=c(4,0.8),
-			min.freq=60, 
+#			min.freq=60, 
 			random.order=F, 
 			color = col, 
 			main="Title",sub="Subtitle")
