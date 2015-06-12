@@ -293,67 +293,63 @@ con <- dbConnect(MySQL(),
     	# First column not used
     	data_week[,1] <- NULL
     	
-		# Get rid of duplicates
-		ind_dup <- which(duplicated(as.character(data_week[,1])) )
+	# Get rid of duplicates
+	ind_dup <- which(duplicated(as.character(data_week[,1])) )
 		
-		if (length(ind_dup)>0) {
-			data_week <- data_week[-ind_dup,] 
-		}
+	if (length(ind_dup)>0) {
+		data_week <- data_week[-ind_dup,] 
+	}
 		
-		# zoo object (we lose the datetime dimension!
-		data_weekz <- zoo(data_week[,2:7],order.by=as.POSIXct(data_week[,1]) )
+	# zoo object (we lose the datetime dimension!
+	data_weekz <- zoo(data_week[,2:7],order.by=as.POSIXct(data_week[,1]) )
     
     	# aggregate data (daily). Second columns are dates
     	data_aggr <- aggregate(data_weekz,as.Date(data_week[,1]) )
     
-   		# Maximum of the week
-		max_week <- max(data_aggr,na.rm=T)
-		min_week <- min(data_aggr,na.rm=T)
+   	# Maximum of the week
+	max_week <- max(data_aggr,na.rm=T)
+	min_week <- min(data_aggr,na.rm=T)
 		
         png(paste0("./data/graph_",
         	gsub("-","_",Sys.Date()-1), "_all_week" ,".png"), width=900, height=600)
+	
 	plot(data_aggr, main= paste0("Menciones de la semana","     @twt_partidos"),
 		cex.main=2.8, cex.lab = 2, cex.axis=1.8, lwd=6, 
 		ylim=c(0,max_week),
     		col = parties_color,
     		xlab=NULL )
+    	
     	dev.off()
-    }
+    	}
+    	
+	# Time series of all at the same time
+	cat("Doing graphs...","\n")
     
-    # Time series of all at the same time
-    cat("Doing graphs...","\n")
+    	max_global <- max(data_mentions[,2:7],na.rm=T)
+	ts_tweets <- zoo(data_mentions[,2:dim(data_mentions)[2]], order.by = as.POSIXct(data_mentions[,1]) )
     
-    max_global <- max(data_mentions[,2:7],na.rm=T)
+    	png(paste0("./data/graph_",gsub("-","_",Sys.Date()-1), "_all_time" ,".png"), width=900, height=600)
+    	
+    	plot(ts_tweets,
+	main= paste0("Menciones:   ", format(Sys.Date()-1,"%d de %B" ),"     @twt_partidos"),
+    	cex.main=2.8,
+    	cex.lab = 2,
+	cex.axis=1.8, 
+	lwd=2.3, 
+	ylim=c(0,max_global),
+	col = parties_color,
+	xlab=NULL )
+	
+	dev.off()
     
-    ts_tweets <- zoo(data_mentions[,2:dim(data_mentions)[2]], order.by = as.POSIXct(data_mentions[,1]) )
+	# Day count mentions
+	mentions_day <- apply(data_mentions[,2:dim(data_mentions)[2]],2,function(x) {sum(x,na.rm=T)})
+	file_all <- paste0("graph_",gsub("-","_",Sys.Date()-1),"_all",".png")
+	path_all <- paste0(path,"/",file_all)
     
-    png(paste0("./data/graph_",gsub("-","_",Sys.Date()-1), "_all_time" ,".png"),
-    width=900, height=600)
-    plot(ts_tweets,
-    main= paste0("Menciones:   ", format(Sys.Date()-1,"%d de %B" ),"     @twt_partidos"),
-    cex.main=2.8,
-    cex.lab = 2,
-    cex.axis=1.8, 
-    lwd=2.3, 
-    ylim=c(0,max_global),
-    col = parties_color,
-    xlab=NULL )
-    dev.off()
-    
-    # Time series better plotted
-    #png(paste0("./data/graph_",gsub("-","_",Sys.Date()-1), "_all_time" ,".png"),width=600,height=600)
-    #par(mrfrow=c(3,1))
-    #for (i in 1:3) {
-    #    plot(ts_tweets[,i], color=parties_color[i],lwd=2.2,xlab=NULL,cex.lab=2
-    
-    # Day count mentions
-    mentions_day <- apply(data_mentions[,2:dim(data_mentions)[2]],2,function(x) {sum(x,na.rm=T)})
-    file_all <- paste0("graph_",gsub("-","_",Sys.Date()-1),"_all",".png")
-    path_all <- paste0(path,"/",file_all)
-    
-    # Paths to time series
-    file_time <- paste0("graph_",gsub("-","_",Sys.Date()-1), "_all_time" ,".png")
-    path_time <- paste0(path, "/", file_time)
+	# Paths to time series
+	file_time <- paste0("graph_",gsub("-","_",Sys.Date()-1), "_all_time" ,".png")
+	path_time <- paste0(path, "/", file_time)
     
     # Paths to average tweets per party
     file_mean <- paste0("graph_",gsub("-","_",Sys.Date()-1), "_mean" ,".png")
@@ -394,7 +390,7 @@ con <- dbConnect(MySQL(),
     ylim=c(0,max(mentions_day/unique,na.rm=T)*1.3 ),col = parties_color )
     dev.off()
     
-    # Barplot of total mentions
+	# Barplot of total mentions
 	png(paste0("./data/graph_",gsub("-","_",Sys.Date()-1),"_all",".png"))
 	barplot(mentions_day,names.arg=parties_short,
 	main= paste0("Menciones por partidos ",Sys.Date()-1),
@@ -415,10 +411,7 @@ con <- dbConnect(MySQL(),
 	cat("Updating twitter account...",as.character(Sys.Date()),"\n")
 	system('python update.py')
 	cat("updated.","\n")
-			
-	# Remove file
-	#file.remove("file_to_upload")
-	
+
 	
 	# Mark calculations as done
 	calc_done <- 1
