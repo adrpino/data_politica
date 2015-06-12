@@ -259,9 +259,8 @@ con <- dbConnect(MySQL(),
 		     theme(axis.text = element_text(size =16) ) +
 		     scale_y_continuous(name="")
 		     
-		ggsave(filename=
-		    paste0("./data/top_", gsub("-","_",Sys.Date()-1), "_", parties[i],".png"),
-		    plot = graf, dpi=310)
+		png(paste0("./data/top_", gsub("-","_",Sys.Date()-1), "_", parties[i],".png"),580,580)
+		graf
 		dev.off()
 	}
 	
