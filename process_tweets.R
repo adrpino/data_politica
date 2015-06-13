@@ -191,8 +191,8 @@ con <- dbConnect(MySQL(),
 		cat("Doing wordclouds...","\n")
 		
 		# If too many mentions, take only the top 200:
-		if (dim(tmp)[1]>200) {
-			tmp2 = tmp[1:200,]
+		if (dim(tmp)[1]>150) {
+			tmp2 = tmp[1:150,]
 		} else {
 			tmp2 = tmp
 		}
@@ -209,14 +209,15 @@ con <- dbConnect(MySQL(),
 			plot.new()
 			col = brewer.pal(8,"BrBG")
 			text(x=0.5,y=0.5,paste0(title1,title2,title3),cex=1.5)
-			wordcloud( tmp[,1], tmp[,2], 
+		
+		wordcloud( tmp2[,1], tmp2[,2], 
 			scale=c(4,0.8),
 #			min.freq=60, 
 			random.order=F, 
 			color = col, 
 			main="Title",sub="Subtitle")
 
-	    dev.off()
+		dev.off()
    
 	}    # loop parties
 	
@@ -258,10 +259,10 @@ con <- dbConnect(MySQL(),
 		     theme(plot.title =element_text( size=24) ) +
 		     theme(axis.text = element_text(size =16) ) +
 		     scale_y_continuous(name="")
-		     
-		png(paste0("./data/top_", gsub("-","_",Sys.Date()-1), "_", parties[i],".png"),580,580)
-		graf
-		dev.off()
+		
+		ggsave(plot=graf, 
+			filename=paste0("./data/top_", gsub("-","_",Sys.Date()-1), "_", parties[i],".png"),
+			width=5, height=5)
 	}
 	
 	
@@ -275,50 +276,51 @@ con <- dbConnect(MySQL(),
 	#TODO save mentions in a MySQL table:
 	dbWriteTable( con, "mentions", data_mentions, append=TRUE)
 
-    # Vector of times (text vector used for barplot only, not for time series)
-    time_plot <- strftime(as.POSIXct(data_mentions[,1]), format="%H:%M")
+	# Vector of times (text vector used for barplot only, not for time series)
+	time_plot <- strftime(as.POSIXct(data_mentions[,1]), format="%H:%M")
 
     
-    # Weekly summary (on monday)
-    if (weekdays(Sys.Date()) == "lunes" ) {
-    	week1 <- as.POSIXct(paste0(Sys.Date()-7, " 00:00:00"))
-    	week2 <- as.POSIXct(paste0(Sys.Date(), " 00:00:00"))
-    	week_q <- paste0("SELECT * FROM mentions WHERE time >= ", 
-    	"'",as.POSIXct(week1), "'", " AND time <= ", "'", as.POSIXct(week2) , "'")
-    	week_res <- dbSendQuery(con,week_q)
-    	data_week <- fetch(week_res,-1)
-    	dbClearResult(week_res)
-    
-    	# First column not used
-    	data_week[,1] <- NULL
-    	
-	# Get rid of duplicates
-	ind_dup <- which(duplicated(as.character(data_week[,1])) )
-		
-	if (length(ind_dup)>0) {
-		data_week <- data_week[-ind_dup,] 
-	}
-		
-	# zoo object (we lose the datetime dimension!
-	data_weekz <- zoo(data_week[,2:7],order.by=as.POSIXct(data_week[,1]) )
-    
-    	# aggregate data (daily). Second columns are dates
-    	data_aggr <- aggregate(data_weekz,as.Date(data_week[,1]) )
-    
-   	# Maximum of the week
-	max_week <- max(data_aggr,na.rm=T)
-	min_week <- min(data_aggr,na.rm=T)
-		
-        png(paste0("./data/graph_",
-        	gsub("-","_",Sys.Date()-1), "_all_week" ,".png"), width=900, height=600)
+	# Weekly summary (on monday)
+	if (weekdays(Sys.Date()) == "lunes" ) {
 	
-	plot(data_aggr, main= paste0("Menciones de la semana","     @twt_partidos"),
-		cex.main=2.8, cex.lab = 2, cex.axis=1.8, lwd=6, 
-		ylim=c(0,max_week),
-    		col = parties_color,
-    		xlab=NULL )
+		week1 <- as.POSIXct(paste0(Sys.Date()-7, " 00:00:00"))
+		week2 <- as.POSIXct(paste0(Sys.Date(), " 00:00:00"))
+		week_q <- paste0("SELECT * FROM mentions WHERE time >= ", 
+		"'",as.POSIXct(week1), "'", " AND time <= ", "'", as.POSIXct(week2) , "'")
+		week_res <- dbSendQuery(con,week_q)
+		data_week <- fetch(week_res,-1)
+		dbClearResult(week_res)
+
+		# First column not used
+		data_week[,1] <- NULL
     	
-    	dev.off()
+		# Get rid of duplicates
+		ind_dup <- which(duplicated(as.character(data_week[,1])) )
+	
+		if (length(ind_dup)>0) {
+			data_week <- data_week[-ind_dup,] 
+		}
+		
+		# zoo object (we lose the datetime dimension!
+		data_weekz <- zoo(data_week[,2:7],order.by=as.POSIXct(data_week[,1]) )
+
+		# aggregate data (daily). Second columns are dates
+		data_aggr <- aggregate(data_weekz,as.Date(data_week[,1]) )
+    
+		# Maximum of the week
+		max_week <- max(data_aggr,na.rm=T)
+		min_week <- min(data_aggr,na.rm=T)
+		
+        	png(paste0("./data/graph_",
+        		gsub("-","_",Sys.Date()-1), "_all_week" ,".png"), width=900, height=600)
+	
+		plot(data_aggr, main= paste0("Menciones de la semana","     @twt_partidos"),
+			cex.main=2.8, cex.lab = 2, cex.axis=1.8, lwd=6, 
+			ylim=c(0,max_week),
+    			col = parties_color,
+    			xlab=NULL )
+    	
+    		dev.off()
     	}
     	
 	# Time series of all at the same time
