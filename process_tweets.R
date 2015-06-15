@@ -112,8 +112,8 @@ con <- dbConnect(MySQL(),
 				corpus_i <- tm_map(corpus_i, function(x) removeWords(x,stopwords("spanish")))
 
 				# Transform again to corpus (some words may become the same and otherwise doesn't work)
-				corpus_i <- VCorpus(VectorSource( corpus_i ) )
-
+				corpus_i <- tm_map(corpus_i, PlainTextDocument)
+				
 				# Term frequency matrix and make it a data frame once it's clean
 				tfparty_i <- as.data.frame( termFreq(corpus_i[[1]]) )
 				tfparty_i <- cbind(rownames(tfparty_i), tfparty_i)
