@@ -16,4 +16,4 @@ El texto del tweet, id, usuario y hora de creación son almacenados en una base 
 Para usar los scripts se requiere acceso a la API de twitter, que puedes obtener aquí:
 https://dev.twitter.com/oauth/overview
 
-El blog sobre el proyecto: www.datapolitica.blogspot.com
+El blog sobre el proyecto: www.data-politica.blogspot.com
