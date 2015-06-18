@@ -26,9 +26,7 @@ dbClearResult(seetables)
 # Create table to store tweets if it doesn't exists
 if ( sum(grepl( "tweets", df_tables[,1]))==0 ) {
  
-	q_tbltweets <- "CREATE TABLE `tweets` (`row_names` INT, `id` VARCHAR(18), `date` DATETIME NOT NULL,`name` VARCHAR(16), `text` VARCHAR(140) NOT NULL)"
-	
-#		q_tbltweets <- "CREATE TABLE `tweets` (`row_names` INT, `id` VARCHAR(18), `date` DATETIME NOT NULL,`name` VARCHAR(16), `retweet BIT, `reply_to` VARCHAR(18), `rt_count` UNSIGNED SMALLINT, `text` VARCHAR(140) NOT NULL)"
+	q_tbltweets <- "CREATE TABLE `tweets` (`row_names` INT, `id` VARCHAR(18), `date` DATETIME NOT NULL,`name` VARCHAR(16), `retweet BIT, `reply_to` VARCHAR(18), `rt_count` UNSIGNED SMALLINT, `text` VARCHAR(140) NOT NULL)"
 		
 	dbSendQuery(con, q_tbltweets)
 		cat("Created \"tweets\" table","\n")
