@@ -61,7 +61,7 @@ for item in parties:
         new_rtcount.append( search[i].retweet_count )
         #new_geo.append( search[i].geo )
         if search[i].text[0:2]=="RT":
-            new_retweet.append( '1' )
+            new_retweet.append( str(search[i].retweeted_status.id) )
         else:
             new_retweet.append( '0' )
                   
