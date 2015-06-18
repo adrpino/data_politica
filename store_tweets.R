@@ -26,7 +26,7 @@ dbClearResult(seetables)
 # Create table to store tweets if it doesn't exists
 if ( sum(grepl( "tweets", df_tables[,1]))==0 ) {
  
-	q_tbltweets <- "CREATE TABLE `tweets` (`row_names` INT, `id` VARCHAR(18), `date` DATETIME NOT NULL,`name` VARCHAR(16), `retweet BIT, `reply_to` VARCHAR(18), `rt_count` UNSIGNED SMALLINT, `text` VARCHAR(140) NOT NULL)"
+	q_tbltweets <- "CREATE TABLE `tweets` (`row_names` INT, `id` VARCHAR(18), `date` DATETIME NOT NULL,`name` VARCHAR(16), `text` VARCHAR(140) NOT NULL, `retweet` BIT, `reply_to` VARCHAR(18), `rt_count` SMALLINT)"
 		
 	dbSendQuery(con, q_tbltweets)
 		cat("Created \"tweets\" table","\n")
@@ -101,7 +101,7 @@ while (Sys.time() < timestart+60*60*24) {
   # Recolectar tweets
 	system('python tweets.py')
 	
-	tmp <- read.csv('temp.txt',col.names=c("id","date","name","text"), stringsAsFactors=F)
+	tmp <- read.csv('temp.txt',col.names=c("id","date","name","text","retweet", "reply_to","rt_count"), stringsAsFactors=F)
 
 	tmp$id <- as.character(tmp$id)
 	tmp$date <- as.POSIXct(tmp$date) + 60*60*2
