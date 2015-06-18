@@ -29,10 +29,14 @@ parties_key = ["@PPopular OR \"Partido Popular\"",
 "@iunida OR \"Izquierda Unida\"", 
 "@UPyD OR '\"Union Progreso y Democracia\" "]
 
-idlist =[]
-textlist=[]
-timelist=[]
-namelist=[]
+Id =[]
+text=[]
+time=[]
+name=[]
+retweet=[]   # if is a retweet
+replyto=[]   # to which this tweet is replying
+rtcount=[]
+#geo = []
 
 n_tweets= 50
 
@@ -40,25 +44,45 @@ n_tweets= 50
 for item in parties:
     print 'Getting tweets from ' + item
     search = api.search(item, count=n_tweets)
-    new_idlist=[]
-    new_textlist=[]
-    new_timelist=[]
-    new_namelist=[]
+    new_Id=[]
+    new_text=[]
+    new_time=[]
+    new_name=[]
+    new_retweet=[]
+    new_replyto=[]
+    new_rtcount=[]
+    #new_geo =[]
     for i in range(0,len(search)):
-        new_idlist.append( search[i].id )
-        new_timelist.append( search[i].created_at )
-        new_textlist.append( search[i].text.replace('\n', ' ' ).replace('\"','' ) )
-        new_namelist.append( search[i].author.screen_name )
-        
-    idlist = new_idlist + idlist
-    timelist = new_timelist + timelist
-    textlist = new_textlist + textlist
-    namelist = new_namelist + namelist
+        new_Id.append( search[i].id )
+        new_time.append( search[i].created_at )
+        new_text.append( search[i].text.replace('\n', ' ' ).replace('\"','' ) )
+        new_name.append( search[i].author.screen_name )
+        new_replyto.append( search[i].in_reply_to_status_id )
+        new_rtcount.append( search[i].retweet_count )
+        #new_geo.append( search[i].geo )
+        if search[i].text[0:2]=="RT":
+            new_retweet.append( '1' )
+        else:
+            new_retweet.append( '0' )
+                  
+    Id = new_Id + Id
+    time = new_time + time
+    text = new_text + text
+    name = new_name + name
+    retweet = new_retweet + retweet
+    replyto = new_replyto + replyto
+    rtcount = new_rtcount + rtcount
 
 
-f = open('temp.txt', 'w')
-for i in range(0,len(idlist)):
-    f.write(str(idlist[i]) +','+ str(timelist[i]) +',' + namelist[i].encode('utf8') +','+'\"'+ textlist[i].encode('utf8') + '\"' + '\n')
+f = open('temp2.txt', 'w')
+for i in range(0,len(Id)):
+    f.write(str(Id[i]) +',' 
+    + str(time[i]) +',' 
+    + name[i].encode('utf8') +','
+    + retweet[i] + ',' 
+    + str(replyto[i]) + ','
+    + str(rtcount[i]) + ','
+    +'\"'+ text[i].encode('utf8') + '\"' + '\n' )
 
 f.close()
 
