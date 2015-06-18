@@ -74,7 +74,7 @@ for item in parties:
     rtcount = new_rtcount + rtcount
 
 
-f = open('temp2.txt', 'w')
+f = open('temp.txt', 'w')
 for i in range(0,len(Id)):
     f.write(str(Id[i]) +',' 
     + str(time[i]) +',' 
