@@ -60,7 +60,7 @@ for item in parties:
         new_replyto.append( search[i].in_reply_to_status_id )
         new_rtcount.append( search[i].retweet_count )
         #new_geo.append( search[i].geo )
-        if search[i].text[0:2]=="RT":
+        if hasattr(search[i],"retweeted_status")==True:
             new_retweet.append( str(search[i].retweeted_status.id) )
         else:
             new_retweet.append( '0' )
