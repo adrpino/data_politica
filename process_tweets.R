@@ -63,7 +63,7 @@ con <- dbConnect(MySQL(),
 
 	# Counter of the while loop
 	data_iter = 1
-
+	
 
 	# Loop til the end of the day
 	while (time1 < timestart + 60*60*24) {
@@ -71,7 +71,7 @@ con <- dbConnect(MySQL(),
 		time2 = time1+window
 		
 		txtquery = paste0("SELECT * FROM tweets WHERE date >= ", "'", 
-            as.POSIXct(time1), "'", " AND date <= ", "'", as.POSIXct(time2) , "'" )
+        		as.POSIXct(time1), "'", " AND date <= ", "'", as.POSIXct(time2) , "'" )
 	
 		cat(paste0("Querying for tweets between ", as.POSIXct(time1), " and ",as.POSIXct(time2)),"\n")
 	
@@ -92,9 +92,9 @@ con <- dbConnect(MySQL(),
 				data=data[-index,]
 			}
 		
-	        cat(paste0("Tweets: ", dim(data)[1], " duplicated: ",length(index)),"\n")
+	        	cat(paste0("Tweets: ", dim(data)[1], " duplicated: ",length(index)),"\n")
 
-			# Indicator telling whether a party was mentioned added as a column
+			# Loop over all parties
 			for (ind in 1:length(parties)) {
 
 				data[ grep(parties[ind],data$text,ignore.case=TRUE) , as.character(parties[ind]) ] <-1
@@ -137,10 +137,17 @@ con <- dbConnect(MySQL(),
 					assign( paste0("tf_",parties[ind]) , tfparty_i)
 				}
 						
-	            mentions[data_iter,ind] <- 
-            	    sum( data[ grep(parties[ind],data$text,ignore.case=TRUE) ,
-            	    as.character(parties[ind]) ] , na.rm=T )
+	       			mentions[data_iter,ind] <- 
+            				sum( data[ grep(parties[ind],data$text,ignore.case=TRUE) ,
+            				as.character(parties[ind]) ] , na.rm=T )
             	
+			}
+
+			# Indicator of of mentioned parties:
+			if (exists(data_ind)) {
+				data_ind <- rbind( data[c(1,8:13)] , data_ind )
+			} else {
+				data_ind <- data[c(1,8:13)]
 			}
 
 			# Take the users that mentions a certain party
@@ -170,6 +177,11 @@ con <- dbConnect(MySQL(),
 
 	}	# end of day queries
 
+	# Process data for mention interactions:
+	index <- which(duplicated(data_ind$id))
+	if length(index)>0 {
+		data_ind <- data_ind[-index,]
+	}
 	
 	# Collapse term frequency data by parties:
 	for (i in 1:length(parties)) {
@@ -212,7 +224,6 @@ con <- dbConnect(MySQL(),
 		
 		wordcloud( tmp2[,1], tmp2[,2], 
 			scale=c(4,0.8),
-#			min.freq=60, 
 			random.order=F, 
 			color = col, 
 			main="Title",sub="Subtitle")
