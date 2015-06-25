@@ -1,4 +1,5 @@
 require("ggplot2")
+require("reshape2")
 
 doHeatmap <- function(data_ind,path) {
 
