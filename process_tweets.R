@@ -1,3 +1,5 @@
+rm(list=ls())
+
 library("RMySQL")
 library("zoo") 					# for time series
 library("tm")
