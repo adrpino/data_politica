@@ -240,6 +240,7 @@ con <- dbConnect(MySQL(),
 		rm(list=paste0("tf_", parties[i]))
 	}
 	rm(tfparty_i)
+	rm(data_ind)
 	
 	# Sum unique tweets by parties:
 	unique <- vector(mode="numeric")
