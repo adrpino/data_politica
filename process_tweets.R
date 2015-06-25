@@ -97,52 +97,65 @@ con <- dbConnect(MySQL(),
 		
 	        	cat(paste0("Tweets: ", dim(data)[1], " duplicated: ",length(index)),"\n")
 
-			# Loop over all parties
+			# Loop sobre partidos
 			for (ind in 1:length(parties)) {
 
+				# Indicador si partido[ind] fue mencionado en el tuit
 				data[ grep(parties[ind],data$text,ignore.case=TRUE) , as.character(parties[ind]) ] <-1
+
+				# Sumar menciones de de cada partido
+	       			mentions[data_iter,ind] <- 
+            				sum( data[ grep(parties[ind],data$text,ignore.case=TRUE) ,
+            				as.character(parties[ind]) ] , na.rm=T )
 				
-				# Get tweets that mention party i
+				# Tuits que mencionan dicho partido
 				dataparty_i <- subset(data, get( as.character(parties[ind]) )==1 )$text 
 
 
-				# Paste all text together, and make it a corpus
+				# Poner texto junto
 				corpus_i <-VCorpus( VectorSource( paste(dataparty_i,collapse=" ") ) )
 
 				# Manipulations of the corpus of party i (put in function)
-				corpus_i <- tm_map(corpus_i, removePunctuation)
+				# This erases @ and #
+				#corpus_i <- tm_map(corpus_i, removePunctuation)
+				
 				corpus_i <- tm_map(corpus_i, tolower)
 				corpus_i <- tm_map(corpus_i, function(x) removeWords(x,stopwords("spanish")))
 
 				# Transform again to corpus (some words may become the same and otherwise doesn't work)
 				corpus_i <- tm_map(corpus_i, PlainTextDocument)
 				
-				# Term frequency matrix and make it a data frame once it's clean
+				# Term Frequency Matrix (TDM). Hacer data frame
 				tfparty_i <- as.data.frame( termFreq(corpus_i[[1]]) )
 				tfparty_i <- cbind(rownames(tfparty_i), tfparty_i)
-			
 				tfparty_i[,1] <- as.character(tfparty_i[,1])
 				rownames(tfparty_i) <- NULL
 
-				# Remove URLS
+				# Quitar URLs
 				rm_ind <- grep("http*", tfparty_i[,1])
 				if (length(rm_ind)>0) {	tfparty_i <- tfparty_i[-rm_ind,] }
 			
-				# And also the own's party name
+				# Eliminar nombre del partido
 				rm_ind <- grep(parties[ind], tfparty_i[,1],ignore.case=T) 
 				if (length(rm_ind)>0) {tfparty_i <- tfparty_i[-rm_ind,] }
+
+				# Sustituir tildes
+				tf_party[,1] <- sapply(tf_party[,1], function(x) gsub("á","a",x))
+				tf_party[,1] <- sapply(tf_party[,1], function(x) gsub("é","e",x))
+				tf_party[,1] <- sapply(tf_party[,1], function(x) gsub("í","i",x))
+				tf_party[,1] <- sapply(tf_party[,1], function(x) gsub("ó","o",x))
+				tf_party[,1] <- sapply(tf_party[,1], function(x) gsub("ú","u",x))
+				
+				# Eliminar símbolos (respetando @ y #)
+				tf_party[,1] <- sapply(tf_party[,1], function(x) gsub("[:_.,-]","",x))
 			
-				# Take previous TDM of party "i" and append the new one of this loop
+				# Concatenar TDM
 				if ( exists( as.character(paste0("tf_",parties[ind])) ) ) {
 					assign( paste0("tf_",parties[ind]) , 
 						rbind(tfparty_i, get( paste0("tf_",parties[ind] ) ) ) )
 				} else {
 					assign( paste0("tf_",parties[ind]) , tfparty_i)
 				}
-						
-	       			mentions[data_iter,ind] <- 
-            				sum( data[ grep(parties[ind],data$text,ignore.case=TRUE) ,
-            				as.character(parties[ind]) ] , na.rm=T )
             	
 			}
 
