@@ -146,9 +146,9 @@ con <- dbConnect(MySQL(),
 
 			# Indicator of of mentioned parties:
 			if (exists(data_ind)) {
-				data_ind <- rbind( data[c(1,8:13)] , data_ind )
+				data_ind <- rbind( data[c(2,9:14)] , data_ind )
 			} else {
-				data_ind <- data[c(1,8:13)]
+				data_ind <- data[c(2,9:14)]
 			}
 
 			# Take the users that mentions a certain party
@@ -180,7 +180,7 @@ con <- dbConnect(MySQL(),
 
 	# Process data for mention interactions:
 	index <- which(duplicated(data_ind$id))
-	if length(index)>0 {
+	if (length(index)>0) {
 		data_ind <- data_ind[-index,]
 	}
 	
