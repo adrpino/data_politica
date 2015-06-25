@@ -4,6 +4,7 @@ library("tm")
 library("wordcloud")
 library("RColorBrewer")			# color of wordclouds
 library("ggplot2")
+source("doHeatmap.R")			# Interactions between mentions
 
 path <- "/home/adrian/Documentos/v3/data"
 
