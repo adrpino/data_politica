@@ -1,3 +1,5 @@
+require("ggplot2")
+
 doHeatmap <- function(data_ind,path) {
 
 	for (i in 1:length(parties)) {
