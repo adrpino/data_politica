@@ -111,6 +111,8 @@ con <- dbConnect(MySQL(),
 				# Tuits que mencionan dicho partido
 				dataparty_i <- subset(data, get( as.character(parties[ind]) )==1 )$text 
 
+				# .. si existen datos de dicho partido
+				if ( is.null(dim(dataparty_i)==F ) { 
 
 				# Poner texto junto
 				corpus_i <-VCorpus( VectorSource( paste(dataparty_i,collapse=" ") ) )
@@ -140,14 +142,14 @@ con <- dbConnect(MySQL(),
 				if (length(rm_ind)>0) {tfparty_i <- tfparty_i[-rm_ind,] }
 
 				# Sustituir tildes
-				tf_party[,1] <- sapply(tf_party[,1], function(x) gsub("á","a",x))
-				tf_party[,1] <- sapply(tf_party[,1], function(x) gsub("é","e",x))
-				tf_party[,1] <- sapply(tf_party[,1], function(x) gsub("í","i",x))
-				tf_party[,1] <- sapply(tf_party[,1], function(x) gsub("ó","o",x))
-				tf_party[,1] <- sapply(tf_party[,1], function(x) gsub("ú","u",x))
+				tfparty_i[,1] <- sapply(tfparty_i[,1], function(x) gsub("á","a",x))
+				tfparty_i[,1] <- sapply(tfparty_i[,1], function(x) gsub("é","e",x))
+				tfparty_i[,1] <- sapply(tfparty_i[,1], function(x) gsub("í","i",x))
+				tfparty_i[,1] <- sapply(tfparty_i[,1], function(x) gsub("ó","o",x))
+				tfparty_i[,1] <- sapply(tfparty_i[,1], function(x) gsub("ú","u",x))
 				
 				# Eliminar símbolos (respetando @ y #)
-				tf_party[,1] <- sapply(tf_party[,1], function(x) gsub("[:_.,-()]","",x))
+				tfparty_i[,1] <- sapply(tfparty_i[,1], function(x) gsub("[:_.,-()]","",x))
 			
 				# Concatenar TDM
 				if ( exists( as.character(paste0("tf_",parties[ind])) ) ) {
@@ -155,6 +157,8 @@ con <- dbConnect(MySQL(),
 						rbind(tfparty_i, get( paste0("tf_",parties[ind] ) ) ) )
 				} else {
 					assign( paste0("tf_",parties[ind]) , tfparty_i)
+				}
+				
 				}
             	
 			}
