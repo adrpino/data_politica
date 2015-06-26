@@ -159,7 +159,7 @@ con <- dbConnect(MySQL(),
 					assign( paste0("tf_",parties[ind]) , tfparty_i)
 				}
 				
-				}
+				}  # empty dataparty_i
             	
 			}
 
