@@ -149,7 +149,7 @@ con <- dbConnect(MySQL(),
 				tfparty_i[,1] <- sapply(tfparty_i[,1], function(x) gsub("ú","u",x))
 				
 				# Eliminar símbolos (respetando @ y #)
-				tfparty_i[,1] <- sapply(tfparty_i[,1], function(x) gsub("[:_.,-()]","",x))
+				tfparty_i[,1] <- sapply(tfparty_i[,1], function(x) gsub("[:;.,\'\"-\\(\\)],"",x))
 			
 				# Concatenar TDM
 				if ( exists( as.character(paste0("tf_",parties[ind])) ) ) {
