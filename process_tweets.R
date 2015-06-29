@@ -148,8 +148,20 @@ con <- dbConnect(MySQL(),
 				tfparty_i[,1] <- sapply(tfparty_i[,1], function(x) gsub("ó","o",x))
 				tfparty_i[,1] <- sapply(tfparty_i[,1], function(x) gsub("ú","u",x))
 				
+				# Eliminar emojis (por diferentes rangos)
+				tfparty_i[,1] <- sapply(tfparty_i[,1], function(x) gsub("[\U0001F300-\U0001F64F]","",x))
+				tfparty_i[,1] <- sapply(tfparty_i[,1], function(x) gsub("[\U0001F680-\U0001F6FF]","",x))
+				tfparty_i[,1] <- sapply(tfparty_i[,1], function(x) gsub("[\u2600-\u26FF]","",x))
+				tfparty_i[,1] <- sapply(tfparty_i[,1], function(x) gsub("[\u2700-\u27BF]","",x))
+				
+				# Eliminar las entradas vacías de estos emojis (si existen)
+				index <- which( nchar(as.character(tfparty_i[,1])==0) )
+				if (length(index)>0) {
+					tfparty_i <- tfparty_i[-index,]
+				}
+				
 				# Eliminar símbolos (respetando @ y #)
-				tfparty_i[,1] <- sapply(tfparty_i[,1], function(x) gsub("[-:;,.\'\"\\(\\)],"",x))
+				tfparty_i[,1] <- sapply(tfparty_i[,1], function(x) gsub("[-:;,.\'\"\\(\\)]","",x))
 			
 				# Concatenar TDM
 				if ( exists( as.character(paste0("tf_",parties[ind])) ) ) {
