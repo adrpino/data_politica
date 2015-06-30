@@ -155,7 +155,7 @@ con <- dbConnect(MySQL(),
 				tfparty_i[,1] <- sapply(tfparty_i[,1], function(x) gsub("[\u2700-\u27BF]","",x))
 				
 				# Eliminar las entradas vacías de estos emojis (si existen)
-				index <- which( nchar(as.character(tfparty_i[,1])==0) )
+				index <- which( nchar(as.character(tfparty_i[,1]))==0 )
 				if (length(index)>0) {
 					tfparty_i <- tfparty_i[-index,]
 				}
