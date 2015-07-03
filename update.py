@@ -23,9 +23,9 @@ f=open("file_to_upload")
 paths = f.readlines()
 
 # Remove EOL in paths (last char)
-path_all  = paths[0][0:len(paths[0])-1]
-path_time = paths[1][0:len(paths[1])-1]
-path_mean = paths[2][0:len(paths[2])-1]
+path_all         = paths[0][0:len(paths[0])-1]
+path_time        = paths[1][0:len(paths[1])-1]
+path_mean        = paths[2][0:len(paths[2])-1]
 
 path_wc_pp       = paths[3][0:len(paths[3])-1]
 path_wc_podemos  = paths[4][0:len(paths[4])-1]
@@ -45,7 +45,7 @@ path_inter       = paths[15][0:len(paths[15])-1]
 
 
 # Case of week summary
-if len(paths)==18:
+if len(paths)==17:
 	path_week       = paths[16][0:len(paths[16])-1]
 
 
@@ -59,7 +59,7 @@ status_time = "Menciones por horas : " + '%s/%s/%s' % ( ystday.day, ystday.month
 
 status_mean = "Promedio tweets por usuario: " + '%s/%s/%s' % ( ystday.day, ystday.month, ystday.year) + " #DataPolitica_media"
 
-status_week = "Resumen de la semana política en twitter #Datapolitica_semana"
+status_week = "Resumen de la semana política en twitter #DataPolitica_semana"
 
 status_wc_pp = "Qué dice la gente sobre el #PP: " + '%s/%s/%s'% ( ystday.day, ystday.month, ystday.year)
 status_wc_podemos = "Qué dice la gente sobre #Podemos: "+'%s/%s/%s' % ( ystday.day, ystday.month, ystday.year)
