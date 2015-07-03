@@ -1,7 +1,7 @@
 require("ggplot2")
 require("reshape2")
 
-doHeatmap <- function(data_ind,path) {
+doInteractions <- function(data_ind,path) {
 
 	for (i in 1:length(parties)) {
 		mentions_i <- mentions_ind[ complete.cases(mentions_ind[parties[i]] ), ]
@@ -31,14 +31,21 @@ doHeatmap <- function(data_ind,path) {
 	# Translate matrix to long dataset
 	df_mentions3 <- melt( as.matrix(df_mentions2),na.rm=T)
 
-	interaction <- ggplot(df_mentions3, aes(Var1,Var2)) + geom_tile(aes(fill=value))+
-    		scale_fill_gradient(low = "white", high = "steelblue") +
-    		guides(fill=FALSE) +
+	# Get rid of the count of those who only mention themselves
+	df_mentions4 <- df_mentions3
+	index <- which(df_mentions4$Var1==df_mentions4$Var2)
+	df_mentions4 <- df_mentions4[-index,]
+
+	interaction <- ggplot(df_mentions4, aes(Var1,Var2)) + geom_tile(aes(fill=value))+
+		scale_fill_gradient(low = "white", high = "#339966") +
 		scale_x_discrete(name="") + 
 		scale_y_discrete(name="") +
-		theme(axis.text.x=element_text(angle=90,hjust=1) ) +
-		ggtitle(paste0("Interacciones entre partidos" ) )
+		theme(axis.text.x=element_text(angle=90,hjust=1), 
+		plot.title = element_text(size = 16, colour = "black", vjust = 1) ,
+		legend.title = element_blank() ) +
+		ggtitle(paste0("Interacciones entre partidos" ) ) 
 
-	ggsave(plot=interaction,filename=paste0(path,"/heat.png"),width=5,height=5)
-	
+	ggsave(plot=interaction,filename=paste0(path,"/heat_", 
+		gsub("-","_",Sys.Date()-1), ".png"),width=4.5,height=4)
+
 }
