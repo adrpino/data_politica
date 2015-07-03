@@ -407,12 +407,7 @@ con <- dbConnect(MySQL(),
 		write.table(path_cloud,file="file_to_upload", 
 			row.names=F,col.names=F,append=TRUE, eol="\n", quote=F)
 	}
-    
-	# Path to interactions
-	file_inter <- paste0("inter_", gsub("-","_",Sys.Date()-1), ".png")
-	path_inter <- paste0(path, "/", file_inter)
-	write.table(path_inter,file="file_to_upload", row.names=F,col.names=F,append=TRUE, eol="\n", quote=F)
-    
+
 	# Paths to top tweeters
 	for (i in 1:length(parties)) {
 		file_top <- paste0("top_", gsub("-","_",Sys.Date()-1), "_", parties[i],".png")
@@ -420,6 +415,11 @@ con <- dbConnect(MySQL(),
 		write.table(path_top,file="file_to_upload", 
 		row.names=F,col.names=F,append=TRUE, eol="\n", quote=F)
 	}
+
+	# Path to interactions
+	file_inter <- paste0("inter_", gsub("-","_",Sys.Date()-1), ".png")
+	path_inter <- paste0(path, "/", file_inter)
+	write.table(path_inter,file="file_to_upload", row.names=F,col.names=F,append=TRUE, eol="\n", quote=F)
 	
 	if (weekdays(Sys.Date()) == "lunes" ) {
 		file_week <- paste0("graph_",gsub("-","_",Sys.Date()-1), "_all_week" ,".png")
