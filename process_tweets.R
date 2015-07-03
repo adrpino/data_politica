@@ -6,7 +6,7 @@ library("tm")
 library("wordcloud")
 library("RColorBrewer")			# color of wordclouds
 library("ggplot2")
-source("doHeatmap.R")			# Interactions between mentions
+source("doInteraction.R")			# Interactions between mentions
 
 path <- "/home/adrian/Documentos/v3/data"
 
@@ -215,6 +215,9 @@ con <- dbConnect(MySQL(),
 		data_ind <- data_ind[-index,]
 	}
 	
+	# Graph of interactions
+	doInteraction(path,data_ind)
+	
 	# Collapse term frequency data by parties:
 	for (i in 1:length(parties)) {
 		tmp <- get( paste0("tf_", parties[i]) )
@@ -263,15 +266,7 @@ con <- dbConnect(MySQL(),
 		dev.off()
    
 	}    # loop parties
-	
-	# Remove variables:
-	rm(tmp)
-	rm(tmp1)
-	for (i in 1:length(parties)) {
-		rm(list=paste0("tf_", parties[i]))
-	}
-	rm(tfparty_i)
-	rm(data_ind)
+
 	
 	# Sum unique tweets by parties:
 	unique <- vector(mode="numeric")
@@ -396,44 +391,49 @@ con <- dbConnect(MySQL(),
 	file_time <- paste0("graph_",gsub("-","_",Sys.Date()-1), "_all_time" ,".png")
 	path_time <- paste0(path, "/", file_time)
     
-    # Paths to average tweets per party
-    file_mean <- paste0("graph_",gsub("-","_",Sys.Date()-1), "_mean" ,".png")
-    path_mean <- paste0(path, "/", file_mean)
+	# Paths to average tweets per party
+	file_mean <- paste0("graph_",gsub("-","_",Sys.Date()-1), "_mean" ,".png")
+	path_mean <- paste0(path, "/", file_mean)
+ 
+	# Paths to graph to upload (each one in a line)
+	write.table(path_all, file="file_to_upload", row.names=F,col.names=F, eol="\n", quote=F)
+	write.table(path_time,file="file_to_upload", row.names=F,col.names=F,append=TRUE, eol="\n", quote=F)
+	write.table(path_mean,file="file_to_upload", row.names=F,col.names=F,append=TRUE, eol="\n", quote=F)
     
-    # Paths to graph to upload (each one in a line)
-    write.table(path_all, file="file_to_upload", row.names=F,col.names=F, eol="\n", quote=F)
-    write.table(path_time,file="file_to_upload", row.names=F,col.names=F,append=TRUE, eol="\n", quote=F)
-    write.table(path_mean,file="file_to_upload", row.names=F,col.names=F,append=TRUE, eol="\n", quote=F)
+	# Paths to word clouds
+	for (i in 1:length(parties)) {
+		file_cloud <- paste0("cloud_", gsub("-","_",Sys.Date()-1), "_", parties[i],".png")
+		path_cloud <- paste0(path, "/", file_cloud)
+		write.table(path_cloud,file="file_to_upload", 
+			row.names=F,col.names=F,append=TRUE, eol="\n", quote=F)
+	}
     
-    # Paths to word clouds
-    for (i in 1:length(parties)) {
-	file_cloud <- paste0("cloud_", gsub("-","_",Sys.Date()-1), "_", parties[i],".png")
-    	path_cloud <- paste0(path, "/", file_cloud)
-        write.table(path_cloud,file="file_to_upload", 
-        	row.names=F,col.names=F,append=TRUE, eol="\n", quote=F)
-    }
+	# Path to interactions
+	file_inter <- paste0("inter_", gsub("-","_",Sys.Date()-1), ".png")
+	path_inter <- paste0(path, "/", file_inter)
+	write.table(path_inter,file="file_to_upload", row.names=F,col.names=F,append=TRUE, eol="\n", quote=F)
     
-    # Paths to top tweeters
-    for (i in 1:length(parties)) {
-    	file_top <- paste0("top_", gsub("-","_",Sys.Date()-1), "_", parties[i],".png")
+	# Paths to top tweeters
+	for (i in 1:length(parties)) {
+		file_top <- paste0("top_", gsub("-","_",Sys.Date()-1), "_", parties[i],".png")
 		path_top <- paste0(path, "/", file_top)
 		write.table(path_top,file="file_to_upload", 
-        	row.names=F,col.names=F,append=TRUE, eol="\n", quote=F)
-    }
+		row.names=F,col.names=F,append=TRUE, eol="\n", quote=F)
+	}
+	
+	if (weekdays(Sys.Date()) == "lunes" ) {
+		file_week <- paste0("graph_",gsub("-","_",Sys.Date()-1), "_all_week" ,".png")
+		path_week <- paste0(path, "/", file_week)
+		write.table(path_week,file="file_to_upload", 
+		row.names=F,col.names=F,append=TRUE, eol="\n",quote=F)
+	}
     
-    if (weekdays(Sys.Date()) == "lunes" ) {
-    	file_week <- paste0("graph_",gsub("-","_",Sys.Date()-1), "_all_week" ,".png")
-    	path_week <- paste0(path, "/", file_week)
-        write.table(path_week,file="file_to_upload", 
-        row.names=F,col.names=F,append=TRUE, eol="\n",quote=F)
-    }
-    
-    # Barplot of unique tweeters
-    png( paste0("./data/graph_", gsub("-","_",Sys.Date()-1),"_mean",".png"))
-    barplot(mentions_day/unique,names.arg=parties_short,
-    main= paste0("Promedio tweets por usuario ",Sys.Date()-1),
-    ylim=c(0,max(mentions_day/unique,na.rm=T)*1.3 ),col = parties_color )
-    dev.off()
+	# Barplot of unique tweeters
+	png( paste0("./data/graph_", gsub("-","_",Sys.Date()-1),"_mean",".png"))
+	barplot(mentions_day/unique,names.arg=parties_short,
+	main= paste0("Promedio tweets por usuario ",Sys.Date()-1),
+	ylim=c(0,max(mentions_day/unique,na.rm=T)*1.3 ),col = parties_color )
+	dev.off()
     
 	# Barplot of total mentions
 	png(paste0("./data/graph_",gsub("-","_",Sys.Date()-1),"_all",".png"))
@@ -457,6 +457,14 @@ con <- dbConnect(MySQL(),
 	system('python update.py')
 	cat("updated.","\n")
 
+	# Remove variables:
+	rm(tmp)
+	rm(tmp1)
+	for (i in 1:length(parties)) {
+		rm(list=paste0("tf_", parties[i]))
+	}
+	rm(tfparty_i)
+	rm(data_ind)
 	
 	# Mark calculations as done
 	calc_done <- 1
