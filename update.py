@@ -41,10 +41,12 @@ path_top_cs      = paths[12][0:len(paths[12])-1]
 path_top_iu      = paths[13][0:len(paths[13])-1]
 path_top_upyd    = paths[14][0:len(paths[14])-1]
 
+path_inter       = paths[15][0:len(paths[15])-1]
+
 
 # Case of week summary
-if len(paths)==16:
-	path_week       = paths[15][0:len(paths[15])-1]
+if len(paths)==18:
+	path_week       = paths[16][0:len(paths[16])-1]
 
 
 # Date
@@ -57,7 +59,7 @@ status_time = "Menciones por horas : " + '%s/%s/%s' % ( ystday.day, ystday.month
 
 status_mean = "Promedio tweets por usuario: " + '%s/%s/%s' % ( ystday.day, ystday.month, ystday.year) + " #DataPolitica_media"
 
-status_week = "Resumen de la semana política en twitter"
+status_week = "Resumen de la semana política en twitter #Datapolitica_semana"
 
 status_wc_pp = "Qué dice la gente sobre el #PP: " + '%s/%s/%s'% ( ystday.day, ystday.month, ystday.year)
 status_wc_podemos = "Qué dice la gente sobre #Podemos: "+'%s/%s/%s' % ( ystday.day, ystday.month, ystday.year)
@@ -73,6 +75,7 @@ status_top_cs = "Top 10 tuiteros de #Ciudadanos #DataPolitica_TopCs "+'%s/%s/%s'
 status_top_iu = "Top 10 tuiteros de #IU #DataPolitica_TopIU " +'%s/%s/%s' % ( ystday.day, ystday.month, ystday.year)
 status_top_upyd ="Top 10 tuiteros de #UPyD #DataPolitica_TopUPyD " +'%s/%s/%s' % ( ystday.day, ystday.month, ystday.year)
 
+status_inter = "Interacciones entre tweets " +'%s/%s/%s'% ( ystday.day, ystday.month, ystday.year) + "#DataPolitica_Interacciones"
 
 
 # Update
@@ -91,9 +94,10 @@ api.update_with_media(path_top_iu      , status = status_top_iu)
 api.update_with_media(path_top_upyd    , status = status_top_upyd)
 
 
-api.update_with_media(path_mean, status = status_mean)
-api.update_with_media(path_all , status = status_all)
-api.update_with_media(path_time, status = status_time)
+api.update_with_media(path_mean , status = status_mean )
+api.update_with_media(path_all  , status = status_all  )
+api.update_with_media(path_time , status = status_time )
+api.update_with_media(path_inter, status = status_inter)
 
 if len(paths)==16:
     api.update_with_media(path_week, status = status_week)
