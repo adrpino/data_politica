@@ -75,7 +75,7 @@ status_top_cs = "Top 10 tuiteros de #Ciudadanos #DataPolitica_TopCs "+'%s/%s/%s'
 status_top_iu = "Top 10 tuiteros de #IU #DataPolitica_TopIU " +'%s/%s/%s' % ( ystday.day, ystday.month, ystday.year)
 status_top_upyd ="Top 10 tuiteros de #UPyD #DataPolitica_TopUPyD " +'%s/%s/%s' % ( ystday.day, ystday.month, ystday.year)
 
-status_inter = "Interacciones entre tweets " +'%s/%s/%s'% ( ystday.day, ystday.month, ystday.year) + "#DataPolitica_Interacciones"
+status_inter = "Interacciones entre tweets " +'%s/%s/%s'% ( ystday.day, ystday.month, ystday.year) + " #DataPolitica_Interacciones"
 
 
 # Update
