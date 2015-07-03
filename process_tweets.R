@@ -6,7 +6,7 @@ library("tm")
 library("wordcloud")
 library("RColorBrewer")			# color of wordclouds
 library("ggplot2")
-source("doInteraction.R")			# Interactions between mentions
+source("doInteractions.R")			# Interactions between mentions
 
 path <- "/home/adrian/Documentos/v3/data"
 
@@ -216,7 +216,7 @@ con <- dbConnect(MySQL(),
 	}
 	
 	# Graph of interactions
-	doInteraction(path,data_ind)
+	doInteractions(data_ind,path)
 	
 	# Collapse term frequency data by parties:
 	for (i in 1:length(parties)) {
