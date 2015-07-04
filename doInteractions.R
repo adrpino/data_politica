@@ -3,6 +3,11 @@ require("reshape2")
 
 doInteractions <- function(data_ind,path) {
 
+parties <- c("PPopular","ahorapodemos","PSOE","ciudadanosCs","iunida","UPyD")
+df_mentions <- data.frame(replicate(6,rep(0,6)),row.names=parties)
+colnames(df_mentions) <- parties
+df_mentions2 <- df_mentions
+
 	for (i in 1:length(parties)) {
 		mentions_i <- mentions_ind[ complete.cases(mentions_ind[parties[i]] ), ]
 		parties_others <- parties[-i]
@@ -45,7 +50,7 @@ doInteractions <- function(data_ind,path) {
 		legend.title = element_blank() ) +
 		ggtitle(paste0("Interacciones entre partidos" ) ) 
 
-	ggsave(plot=interaction,filename=paste0(path,"/heat_", 
+	ggsave(plot=interaction,filename=paste0(path,"/data/heat_", 
 		gsub("-","_",Sys.Date()-1), ".png"),width=4.5,height=4)
 
 }
