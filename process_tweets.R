@@ -61,7 +61,9 @@ con <- dbConnect(MySQL(),
 	
 	# Create vectors that will store unique users
 	for (i in 1:length(parties)) {
-		assign( paste0( "user_", parties[i] ) , vector(mode="character"))
+		assign( paste0( "tweeters_", parties[i] ) , vector(mode="character"))
+		assign( paste0( "origweeters_", parties[i] ) , vector(mode="character"))
+		assign( paste0( "retweeters_", parties[i] ) , vector(mode="character"))
 		assign( paste0( "tf_"  , parties[i] ) , vector(mode="character")) 
 	}
 
@@ -185,12 +187,22 @@ con <- dbConnect(MySQL(),
 
 			# Take the users that mentions a certain party
 			for (i in 1:length(parties)) {
-				aa <- data[complete.cases(data[parties[i]]),"name"] 
-			
-			# Concatenate previous users and store them
-			assign( paste0( "user_",parties[i]), 
-				 c( aa,get( paste0("user_",parties[i]) ) ) )
+				tmp_1 <- data[complete.cases(data[parties[i]]),"name"]
+				tmp_2 <- data[complete.cases(data[parties[i]]) & data$retweet==0 ,"name"] # origtweeters
+				tmp_3 <- data[complete.cases(data[parties[i]]) & data$retweet!=0 ,"name"] # retweeters
+
+				# Concatenate previous users and store them
+				assign( paste0( "tweeters_",parties[i]), 
+					 c( aa,get( paste0("tweeters_",parties[i]) ) ) )
+					 
+				assign( paste0( "origtweeters_",parties[i]), 
+					 c( aa,get( paste0("origtweeters_",parties[i]) ) ) )
+
+				assign( paste0( "retweeters_",parties[i]), 
+					 c( aa,get( paste0("retweeters_",parties[i]) ) ) )					 
 			}
+			
+			
 
 			# No data
 		} else {	
@@ -273,19 +285,26 @@ con <- dbConnect(MySQL(),
 	unique <- vector(mode="numeric")
 	
 	for (i in 1:length(parties)) {
-		unique[i] = length( unique( get( paste0( "user_",parties[i]) ) ) )
+		unique[i] = length( unique( get( paste0( "tweeters_",parties[i]) ) ) )
 	}	
 	
-	# Count mentions by users
+	# Count tweets, original tweets and retweets by users
 	for (i in 1:length(parties)) {
-		assign( paste0("count_",parties[i]) , 
-		  sort( table( get( paste0("user_",parties[i]) ) ), decreasing=T ) )
+		assign( paste0("count_tweeters_",parties[i]) , 
+		  sort( table( get( paste0("tweeters_",parties[i]) ) ), decreasing=T ) )
+
+		assign( paste0("count_origtweeters_",parties[i]) , 
+		  sort( table( get( paste0("origtweeters_",parties[i]) ) ), decreasing=T ) )
+
+		assign( paste0("count_retweeters_",parties[i]) , 
+		  sort( table( get( paste0("retweeters_",parties[i]) ) ), decreasing=T ) )
+		  
 	}
 	
 	parties_ggcolor = c("#0066FF","#993399","#FF0000","#FF9900","#CC0000","#FF33CC")
 
 	for (i in 1:length(parties)) {
-		top_tweeters <- as.data.frame( head( get( paste0("count_", parties[i]) ) ,10 ) )
+		top_tweeters <- as.data.frame( head( get( paste0("count_tweeters_", parties[i]) ) ,10 ) )
 		top_tweeters <- cbind(rownames(top_tweeters),top_tweeters)
 		rownames(top_tweeters) <- NULL
 		top_tweeters[,3]<- factor(top_tweeters[,1],as.character(top_tweeters[,1]))
