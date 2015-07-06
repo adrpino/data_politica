@@ -193,13 +193,13 @@ con <- dbConnect(MySQL(),
 
 				# Concatenate previous users and store them
 				assign( paste0( "tweeters_",parties[i]), 
-					 c( aa,get( paste0("tweeters_",parties[i]) ) ) )
+					 c( tmp_1,get( paste0("tweeters_",parties[i]) ) ) )
 					 
 				assign( paste0( "origtweeters_",parties[i]), 
-					 c( aa,get( paste0("origtweeters_",parties[i]) ) ) )
+					 c( tmp_2,get( paste0("origtweeters_",parties[i]) ) ) )
 
 				assign( paste0( "retweeters_",parties[i]), 
-					 c( aa,get( paste0("retweeters_",parties[i]) ) ) )					 
+					 c( tmp_3,get( paste0("retweeters_",parties[i]) ) ) )					 
 			}
 			
 			
