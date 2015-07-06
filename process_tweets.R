@@ -113,7 +113,7 @@ con <- dbConnect(MySQL(),
 				dataparty_i <- subset(data, get( as.character(parties[ind]) )==1 )$text 
 
 				# .. si existen datos de dicho partido
-				if ( is.null(dim(dataparty_i)==F ) { 
+				if ( length(dataparty_i)>0 ) { 
 
 				# Poner texto junto
 				corpus_i <-VCorpus( VectorSource( paste(dataparty_i,collapse=" ") ) )
@@ -166,7 +166,7 @@ con <- dbConnect(MySQL(),
 				# Eliminar símbolos (respetando @ y #)
 				tfparty_i[,1] <- sapply(tfparty_i[,1], function(x) gsub("[-:;,.\'\"\\(\\)¿?¡!]","",x))
 				
-				}
+				}    # dim tfparty_i
 			
 				# Concatenar TDM
 				assign( paste0("tf_",parties[ind]) , 
