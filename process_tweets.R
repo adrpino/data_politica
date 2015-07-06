@@ -62,7 +62,7 @@ con <- dbConnect(MySQL(),
 	# Create vectors that will store unique users
 	for (i in 1:length(parties)) {
 		assign( paste0( "tweeters_", parties[i] ) , vector(mode="character"))
-		assign( paste0( "origweeters_", parties[i] ) , vector(mode="character"))
+		assign( paste0( "origtweeters_", parties[i] ) , vector(mode="character"))
 		assign( paste0( "retweeters_", parties[i] ) , vector(mode="character"))
 		assign( paste0( "tf_"  , parties[i] ) , vector(mode="character")) 
 	}
