@@ -141,6 +141,8 @@ con <- dbConnect(MySQL(),
 				rm_ind <- grep(parties[ind], tfparty_i[,1],ignore.case=T) 
 				if (length(rm_ind)>0) {tfparty_i <- tfparty_i[-rm_ind,] }
 
+				if (dim(tfparty_i)[1]>0) {
+				
 				# Sustituir tildes
 				tfparty_i[,1] <- sapply(tfparty_i[,1], function(x) gsub("á","a",x))
 				tfparty_i[,1] <- sapply(tfparty_i[,1], function(x) gsub("é","e",x))
@@ -162,15 +164,13 @@ con <- dbConnect(MySQL(),
 				
 				# Eliminar símbolos (respetando @ y #)
 				tfparty_i[,1] <- sapply(tfparty_i[,1], function(x) gsub("[-:;,.\'\"\\(\\)¿?¡!]","",x))
+				
+				}
 			
 				# Concatenar TDM
-				if ( exists( as.character(paste0("tf_",parties[ind])) ) ) {
-					assign( paste0("tf_",parties[ind]) , 
-						rbind(tfparty_i, get( paste0("tf_",parties[ind] ) ) ) )
-				} else {
-					assign( paste0("tf_",parties[ind]) , tfparty_i)
-				}
-				
+				assign( paste0("tf_",parties[ind]) , 
+					rbind(tfparty_i, get( paste0("tf_",parties[ind] ) ) ) )
+					
 				}  # empty dataparty_i
             	
 			}
