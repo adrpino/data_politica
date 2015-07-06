@@ -61,7 +61,8 @@ con <- dbConnect(MySQL(),
 	
 	# Create vectors that will store unique users
 	for (i in 1:length(parties)) {
-		assign( paste0( "user_",parties[i]), vector(mode="character"))
+		assign( paste0( "user_", parties[i] ) , vector(mode="character"))
+		assign( paste0( "tf_"  , parties[i] ) , vector(mode="character")) 
 	}
 
 	# Counter of the while loop
