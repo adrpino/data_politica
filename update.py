@@ -99,7 +99,7 @@ api.update_with_media(path_all  , status = status_all  )
 api.update_with_media(path_time , status = status_time )
 api.update_with_media(path_inter, status = status_inter)
 
-if len(paths)==16:
+if len(paths)==17:
     api.update_with_media(path_week, status = status_week)
 
 
