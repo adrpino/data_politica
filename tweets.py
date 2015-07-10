@@ -31,7 +31,7 @@ parties_key = ["@PPopular OR \"Partido Popular\"",
 
 Id =[]
 text=[]
-time=[]
+date=[]
 name=[]
 retweet=[]   # if is a retweet
 replyto=[]   # to which this tweet is replying
@@ -46,7 +46,7 @@ for item in parties:
     search = api.search(item, count=n_tweets)
     new_Id=[]
     new_text=[]
-    new_time=[]
+    new_date=[]
     new_name=[]
     new_retweet=[]
     new_replyto=[]
@@ -54,7 +54,7 @@ for item in parties:
     #new_geo =[]
     for i in range(0,len(search)):
         new_Id.append( search[i].id )
-        new_time.append( search[i].created_at )
+        new_date.append( search[i].created_at )
         new_text.append( search[i].text.replace('\n', ' ' ).replace('\"','' ) )
         new_name.append( search[i].author.screen_name )
         new_replyto.append( search[i].in_reply_to_status_id )
@@ -66,18 +66,18 @@ for item in parties:
             new_retweet.append( '0' )
                   
     Id = new_Id + Id
-    time = new_time + time
+    date = new_date + date
     text = new_text + text
     name = new_name + name
     retweet = new_retweet + retweet
     replyto = new_replyto + replyto
     rtcount = new_rtcount + rtcount
-
+#    time.sleep(10)
 
 f = open('temp.txt', 'w')
 for i in range(0,len(Id)):
     f.write(str(Id[i]) +',' 
-    + str(time[i]) +',' 
+    + str(date[i]) +',' 
     + name[i].encode('utf8') +','
     + retweet[i] + ',' 
     + str(replyto[i]) + ','
