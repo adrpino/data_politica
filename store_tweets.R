@@ -101,7 +101,7 @@ while (Sys.time() < timestart+60*60*24) {
   # Recolectar tweets
 	system('python tweets.py')
 	
-	tmp <- read.csv('temp.txt',col.names=c("id","date","name","text","retweet", "reply_to","rt_count"), stringsAsFactors=F)
+	tmp <- read.csv('temp.txt',col.names=c("id","date","name","retweet", "reply_to","rt_count","text"), stringsAsFactors=F)
 
 	tmp$id <- as.character(tmp$id)
 	tmp$date <- as.POSIXct(tmp$date) + 60*60*2
