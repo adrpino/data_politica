@@ -20,6 +20,8 @@ parties_long <- c("l PP", " Podemos", "l PSOE", " Ciudadanos", " IU", " UPyD")
 parties_color <- c( colors()[124], colors()[98], colors()[553], colors()[90], 
 	colors()[555], colors()[118])
 
+parties_ggcolor = c("#0066FF","#993399","#FF0000","#FF9900","#CC0000","#FF33CC")
+
 
 # Window for selecting tweets (in seconds)
 window = 60*10
@@ -301,8 +303,9 @@ con <- dbConnect(MySQL(),
 		  
 	}
 	
-	parties_ggcolor = c("#0066FF","#993399","#FF0000","#FF9900","#CC0000","#FF33CC")
-
+    # Elaborar gráfico de top tuiteros
+    # eliminar fichero con el texto de los tuits
+    unlink("status_top")
 	for (i in 1:length(parties)) {
 		top_tweeters <- as.data.frame( head( get( paste0("count_tweeters_", parties[i]) ) ,10 ) )
 		top_tweeters <- cbind(rownames(top_tweeters),top_tweeters)
@@ -323,8 +326,22 @@ con <- dbConnect(MySQL(),
 		top_retweeters[,1]<- factor(top_retweeters[,1],as.character(top_retweeters[,1]))		
 		top_retweeters[,3] <- factor("retweets"); colnames(top_retweeters)[3] <-"tipo"
 
+        fecha <- format(Sys.Date()-1,format="%d de %B")
+        if (substring(fecha,1,1)=="0") {
+            fecha <- substring(fecha,2)
+        }
+
+		status_top <- paste( paste0("Top tuiteros de", parties_long[i],", ",fecha,":" ), 
+			paste0("@",top_tweeters[1:5,1],collapse=" ") )
+	
+		# Path del fichero
+		path_status_top <- paste0(path,"/status_top")
+		
+		# Escribir el texto del tweet en el fichero
+		write.table( path_status_top, file="status_top", row.names=F,col.names=F,append=TRUE, eol="\n", quote=F)
+
 		graf <- ggplot(top, aes(x = top[,1], y = top[,2])) +
-		     geom_bar(stat = "identity",fill=parties_ggcolor[i],position="dodge") +
+		     geom_bar(stat = "identity",fill=parties_colorhex[i],position="dodge") +
 		     theme(axis.text.x=element_text(angle=90,hjust=1) ) +
 		     scale_x_discrete(name="") + 
 		     ggtitle(paste0("Top 10 tuiteros de @",parties[i] ) ) +
