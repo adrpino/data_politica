@@ -309,15 +309,44 @@ con <- dbConnect(MySQL(),
 		rownames(top_tweeters) <- NULL
 		top_tweeters[,3]<- factor(top_tweeters[,1],as.character(top_tweeters[,1]))
 
-		# Data on the top 10 mentioned by party
-		graf <- ggplot(top_tweeters, aes(x = top_tweeters[,3], y = top_tweeters[,2])) +
+  		top_origtweeters <- as.data.frame( head( get( paste0("count_origtweeters_", parties[i]) ) ,10 ) )
+		top_origtweeters <- cbind(rownames(top_origtweeters),top_origtweeters)
+		rownames(top_origtweeters) <- NULL
+		colnames(top_origtweeters) <- c("nombre","n. tweets")
+		top_origtweeters[,1]<- factor(top_origtweeters[,1],as.character(top_origtweeters[,1]))
+		top_origtweeters[,3] <- factor("tweets originales"); colnames(top_origtweeters)[3] <-"tipo"
+		
+  		top_retweeters <- as.data.frame( head( get( paste0("count_retweeters_", parties[i]) ) ,10 ) )
+		top_retweeters <- cbind(rownames(top_retweeters),top_retweeters)
+		rownames(top_retweeters) <- NULL
+		colnames(top_retweeters) <- c("nombre","n. tweets")
+		top_retweeters[,1]<- factor(top_retweeters[,1],as.character(top_retweeters[,1]))		
+		top_retweeters[,3] <- factor("retweets"); colnames(top_retweeters)[3] <-"tipo"
+
+		graf <- ggplot(top, aes(x = top[,1], y = top[,2])) +
 		     geom_bar(stat = "identity",fill=parties_ggcolor[i],position="dodge") +
 		     theme(axis.text.x=element_text(angle=90,hjust=1) ) +
 		     scale_x_discrete(name="") + 
 		     ggtitle(paste0("Top 10 tuiteros de @",parties[i] ) ) +
-		     theme(plot.title =element_text( size=24) ) +
-		     theme(axis.text = element_text(size =16) ) +
+		     theme(
+		        axis.text = element_text(size =13) ,
+		        plot.title = element_text(size = 15, colour = "black") , 
+		        panel.grid.major = element_line(colour = "lightgray", size=0.4, linetype = "solid") ,
+		        panel.grid.minor = element_line(colour="white") , 
+		        panel.background = element_rect(fill = "white") ,
+		        strip.background = element_rect( fill="#E6E6E6") )  + 
+		     facet_wrap( ~tipo,ncol=1 ) +
 		     scale_y_continuous(name="")
+
+		# Antiguo gráfico
+#		graf <- ggplot(top_tweeters, aes(x = top_tweeters[,3], y = top_tweeters[,2])) +
+#		     geom_bar(stat = "identity",fill=parties_ggcolor[i],position="dodge") +
+#		     theme(axis.text.x=element_text(angle=90,hjust=1) ) +
+#		     scale_x_discrete(name="") + 
+#		     ggtitle(paste0("Top 10 tuiteros de @",parties[i] ) ) +
+#		     theme(plot.title =element_text( size=24) ) +
+#		     theme(axis.text = element_text(size =16) ) +
+#		     scale_y_continuous(name="")
 		
 		ggsave(plot=graf, 
 			filename=paste0("./data/top_", gsub("-","_",Sys.Date()-1), "_", parties[i],".png"),
