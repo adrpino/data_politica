@@ -20,7 +20,7 @@ parties_long <- c("l PP", " Podemos", "l PSOE", " Ciudadanos", " IU", " UPyD")
 parties_color <- c( colors()[124], colors()[98], colors()[553], colors()[90], 
 	colors()[555], colors()[118])
 
-parties_ggcolor = c("#0066FF","#993399","#FF0000","#FF9900","#CC0000","#FF33CC")
+parties_colorhex = c("#0066FF","#993399","#FF0000","#FF9900","#CC0000","#FF33CC")
 
 
 # Window for selecting tweets (in seconds)
