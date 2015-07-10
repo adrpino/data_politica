@@ -22,6 +22,10 @@ api = tweepy.API(auth, wait_on_rate_limit=True)
 f=open("file_to_upload")
 paths = f.readlines()
 
+# Statuses of top tweeters
+f2 = open("status_top")
+status_top = f2.readlines()
+
 # Remove EOL in paths (last char)
 path_all         = paths[0][0:len(paths[0])-1]
 path_time        = paths[1][0:len(paths[1])-1]
@@ -48,9 +52,18 @@ path_inter       = paths[15][0:len(paths[15])-1]
 if len(paths)==17:
 	path_week       = paths[16][0:len(paths[16])-1]
 
-
 # Date
 ystday = date.today()- timedelta(1)
+
+# Paths to status
+status_top_pp      = status_top[0][0:len(status_top[0])-1]
+status_top_podemos = status_top[1][0:len(status_top[1])-1]
+status_top_psoe    = status_top[2][0:len(status_top[2])-1]
+status_top_cs      = status_top[3][0:len(status_top[3])-1]
+status_top_iu      = status_top[4][0:len(status_top[4])-1]
+status_top_upyd    = status_top[5][0:len(status_top[5])-1]
+
+
 
 # Status
 status_all= "Menciones por partidos: " + '%s/%s/%s' % ( ystday.day, ystday.month, ystday.year) + " #DataPolitica_resumen"
