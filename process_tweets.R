@@ -60,6 +60,8 @@ con <- dbConnect(MySQL(),
 	
 	# Data frame counting mentions
 	mentions <- data.frame()
+	# Data frame used for interactions
+	data_ind <- data.frame()
 	
 	# Create vectors that will store unique users
 	for (i in 1:length(parties)) {
@@ -181,11 +183,8 @@ con <- dbConnect(MySQL(),
 			}
 
 			# Indicator of of mentioned parties:
-			if (exists(data_ind)) {
-				data_ind <- rbind( data[c(2,9:14)] , data_ind )
-			} else {
-				data_ind <- data[c(2,9:14)]
-			}
+			data_ind <- rbind( data[c(2,9:14)] , data_ind )
+
 
 			# Take the users that mentions a certain party
 			for (i in 1:length(parties)) {
