@@ -56,12 +56,12 @@ if len(paths)==17:
 ystday = date.today()- timedelta(1)
 
 # Paths to status
-status_top_pp      = status_top[0][0:len(status_top[0])-1]
-status_top_podemos = status_top[1][0:len(status_top[1])-1]
-status_top_psoe    = status_top[2][0:len(status_top[2])-1]
-status_top_cs      = status_top[3][0:len(status_top[3])-1]
-status_top_iu      = status_top[4][0:len(status_top[4])-1]
-status_top_upyd    = status_top[5][0:len(status_top[5])-1]
+status_top_pp      = status_top[0][0:len(status_top[0])-1] + " #DataPolitica_TopPP"
+status_top_podemos = status_top[1][0:len(status_top[1])-1] + " #DataPolitica_TopPodemos"
+status_top_psoe    = status_top[2][0:len(status_top[2])-1] + " #DataPolitica_TopPSOE"
+status_top_cs      = status_top[3][0:len(status_top[3])-1] + " #DataPolitica_TopCs"
+status_top_iu      = status_top[4][0:len(status_top[4])-1] + " #DataPolitica_TopIU"
+status_top_upyd    = status_top[5][0:len(status_top[5])-1] + " #DataPolitica_TopUPyD"
 
 
 
