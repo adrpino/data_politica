@@ -112,3 +112,4 @@ if len(paths)==17:
 
 
 f.close()
+f2.close()
