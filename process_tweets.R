@@ -346,7 +346,7 @@ con <- dbConnect(MySQL(),
 		     ggtitle(paste0("Top 10 tuiteros de @",parties[i] ) ) +
 		     theme(
 		        axis.text = element_text(size =13) ,
-		        plot.title = element_text(size = 15, colour = "black") , 
+		        plot.title = element_text(size = 16, colour = "black") , 
 		        panel.grid.major = element_line(colour = "lightgray", size=0.4, linetype = "solid") ,
 		        panel.grid.minor = element_line(colour="white") , 
 		        panel.background = element_rect(fill = "white") ,
@@ -360,7 +360,7 @@ con <- dbConnect(MySQL(),
 #		     theme(axis.text.x=element_text(angle=90,hjust=1) ) +
 #		     scale_x_discrete(name="") + 
 #		     ggtitle(paste0("Top 10 tuiteros de @",parties[i] ) ) +
-#		     theme(plot.title =element_text( size=24) ) +
+#		     theme(plot.title =element_text( size=18) ) +
 #		     theme(axis.text = element_text(size =16) ) +
 #		     scale_y_continuous(name="")
 		
