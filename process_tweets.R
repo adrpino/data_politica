@@ -325,10 +325,10 @@ con <- dbConnect(MySQL(),
 		top_retweeters[,1]<- factor(top_retweeters[,1],as.character(top_retweeters[,1]))		
 		top_retweeters[,3] <- factor("retweets"); colnames(top_retweeters)[3] <-"tipo"
 
-        fecha <- format(Sys.Date()-1,format="%d de %B")
-        if (substring(fecha,1,1)=="0") {
-            fecha <- substring(fecha,2)
-        }
+		fecha <- format(Sys.Date()-1,format="%d de %B")
+	        if (substring(fecha,1,1)=="0") {
+        		fecha <- substring(fecha,2)
+		}
 
 		status_top <- paste( paste0(parties_hash[i],", ",fecha,":" ), 
 			paste0("@",top_tweeters[1:5,1],collapse=" ") )
