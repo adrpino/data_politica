@@ -331,7 +331,7 @@ con <- dbConnect(MySQL(),
 		}
 
 		status_top <- paste( paste0(parties_hash[i],", ",fecha,":" ), 
-			paste0("@",top_tweeters[1:5,1],collapse=" ") )
+			paste0("@",top_tweeters[1:3,1],collapse=" ") )
 	
 		# Path del fichero
 		path_status_top <- "status_top"
