@@ -21,7 +21,7 @@ parties_color <- c( colors()[124], colors()[98], colors()[553], colors()[90],
 	colors()[555], colors()[118])
 
 parties_colorhex = c("#0066FF","#993399","#FF0000","#FF9900","#CC0000","#FF33CC")
-
+parties_hash <- c("#DataPolitica_TopPP","#DataPolitica_TopPodemos","#DataPolitica_TopPSOE","#DataPolitica_TopCs","#DataPolitica_TopIU","#DataPolitica_TopUPyD")
 
 # Window for selecting tweets (in seconds)
 window = 60*10
@@ -330,11 +330,11 @@ con <- dbConnect(MySQL(),
             fecha <- substring(fecha,2)
         }
 
-		status_top <- paste( paste0("Top tuiteros de", parties_long[i],", ",fecha,":" ), 
+		status_top <- paste( paste0(parties_hash[i],", ",fecha,":" ), 
 			paste0("@",top_tweeters[1:5,1],collapse=" ") )
 	
 		# Path del fichero
-		path_status_top <- paste0(path,"/status_top")
+		path_status_top <- "status_top"
 		
 		# Escribir el texto del tweet en el fichero
 		write.table( path_status_top, file="status_top", row.names=F,col.names=F,append=TRUE, eol="\n", quote=F)
