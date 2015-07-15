@@ -252,8 +252,8 @@ con <- dbConnect(MySQL(),
 		cat("Doing wordclouds...","\n")
 		
 		# If too many mentions, take only the top 200:
-		if (dim(tmp)[1]>150) {
-			tmp2 = tmp[1:150,]
+		if (dim(tmp)[1]>120) {
+			tmp2 = tmp[1:120,]
 		} else {
 			tmp2 = tmp
 		}
