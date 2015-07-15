@@ -50,7 +50,7 @@ df_mentions2 <- df_mentions
 		legend.title = element_blank() ) +
 		ggtitle(paste0("Interacciones entre partidos" ) ) 
 
-	ggsave(plot=interaction,filename=paste0(path,"/data/heat_", 
+	ggsave(plot=interaction,filename=paste0(path,"/heat_", 
 		gsub("-","_",Sys.Date()-1), ".png"),width=4.5,height=4)
 
 }
