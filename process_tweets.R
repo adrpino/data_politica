@@ -8,7 +8,7 @@ library("RColorBrewer")			# color of wordclouds
 library("ggplot2")
 source("doInteractions.R")			# Interactions between mentions
 
-path <- "/home/adrian/Documentos/v3/data"
+path <- "/path/to/directory/data"
 
 parties <- c("PPopular","ahorapodemos","PSOE","ciudadanosCs","iunida","UPyD")
 parties_short <-c("PP","Podemos","PSOE","Cs","IU","UPyD")
