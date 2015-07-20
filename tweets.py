@@ -29,6 +29,16 @@ parties_key = ["@PPopular OR \"Partido Popular\"",
 "@iunida OR \"Izquierda Unida\"", 
 "@UPyD OR '\"Union Progreso y Democracia\" "]
 
+since_Id=[]
+if os.path.isfile('since_id.txt')==True:
+    f = open('since_id.txt','r')
+    for line in f:
+        since_Id.append(line.replace('\n',''))
+        
+else:
+    since_Id = [0,0,0,0,0,0]
+
+
 Id =[]
 text=[]
 date=[]
@@ -36,6 +46,7 @@ name=[]
 retweet=[]   # if is a retweet
 replyto=[]   # to which this tweet is replying
 rtcount=[]
+since_Id2=[]
 #geo = []
 
 n_tweets= 50
@@ -72,7 +83,20 @@ for item in parties:
     retweet = new_retweet + retweet
     replyto = new_replyto + replyto
     rtcount = new_rtcount + rtcount
+    since_Id2.append(new_Id[0])
 #    time.sleep(10)
+
+
+# Update
+since_Id = since_Id2
+
+f = open('since_id.txt','w')
+for i in range(0,len(parties)):
+    f.write( str(since_Id[i]) + '\n' )
+
+   
+f.close()
+
 
 f = open('temp.txt', 'w')
 for i in range(0,len(Id)):
