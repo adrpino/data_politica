@@ -118,8 +118,9 @@ while (Sys.time() < timestart+60*60*24) {
 	}	
 
 	# Save to MySQL
+	if (dim(tmp)[1]>0) {
 	dbWriteTable(con, "tweets", tmp , append = TRUE)	
-
+	}
 	# At night do longer pauses:
 	if ( (Sys.time() > timestart + 60*60*2) && (Sys.time() < timestart + 60*60*5 ) ) {
 	
