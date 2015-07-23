@@ -34,7 +34,7 @@ since_Id=[]
 if os.path.isfile('since_id.txt')==True:
     f = open('since_id.txt','r')
     for line in f:
-        since_Id.append(line.replace('\n',''))
+        since_Id.append( int(line.replace('\n','')) )
         
 else:
     since_Id = [0,0,0,0,0,0]
