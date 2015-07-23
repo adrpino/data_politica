@@ -29,6 +29,7 @@ parties_key = ["@PPopular OR \"Partido Popular\"",
 "@iunida OR \"Izquierda Unida\"", 
 "@UPyD OR '\"Union Progreso y Democracia\" "]
 
+# Array que almacena ids de los últimos tweets
 since_Id=[]
 if os.path.isfile('since_id.txt')==True:
     f = open('since_id.txt','r')
@@ -46,15 +47,15 @@ name=[]
 retweet=[]   # if is a retweet
 replyto=[]   # to which this tweet is replying
 rtcount=[]
-since_Id2=[]
+since_Id2=[]    # if 
 #geo = []
 
 n_tweets= 50
 
 # Loopear por todos los partidos
-for item in parties:
-    print 'Getting tweets from ' + item
-    search = api.search(item, count=n_tweets)
+for ind, item in enumerate(parties):
+#    search = api.search(item, count=n_tweets,since_id =since_Id[ind] )
+    search = api.search(item, count=n_tweets)    
     new_Id=[]
     new_text=[]
     new_date=[]
@@ -64,18 +65,21 @@ for item in parties:
     new_rtcount=[]
     #new_geo =[]
     for i in range(0,len(search)):
-        new_Id.append( search[i].id )
-        new_date.append( search[i].created_at )
-        new_text.append( search[i].text.replace('\n', ' ' ).replace('\"','' ) )
-        new_name.append( search[i].author.screen_name )
-        new_replyto.append( search[i].in_reply_to_status_id )
-        new_rtcount.append( search[i].retweet_count )
-        #new_geo.append( search[i].geo )
-        if hasattr(search[i],"retweeted_status")==True:
-            new_retweet.append( str(search[i].retweeted_status.id) )
-        else:
-            new_retweet.append( '0' )
-                  
+        if (search[i].id>since_Id[ind]):    # Tweets is newer than last one stored
+            new_Id.append( search[i].id )
+            new_date.append( search[i].created_at )
+            new_text.append( search[i].text.replace('\n', ' ' ).replace('\"','' ) )
+            new_name.append( search[i].author.screen_name )
+            new_replyto.append( search[i].in_reply_to_status_id )
+            new_rtcount.append( search[i].retweet_count )
+            #new_geo.append( search[i].geo )
+            if hasattr(search[i],"retweeted_status"):
+                new_retweet.append( str(search[i].retweeted_status.id) )
+            else:
+                new_retweet.append( '0' )
+
+
+    print str(len(new_Id)) + " new tweets from " + item       
     Id = new_Id + Id
     date = new_date + date
     text = new_text + text
@@ -83,18 +87,25 @@ for item in parties:
     retweet = new_retweet + retweet
     replyto = new_replyto + replyto
     rtcount = new_rtcount + rtcount
-    since_Id2.append(new_Id[0])
-#    time.sleep(10)
+    
+    if len(new_Id)>0:                       # si hay tweets nuevos
+        since_Id2.append(new_Id[0])
+    else:                                   # si no
+        since_Id2.append(since_Id[ind])
+    
+    
+    #geo = new_geo + geo
+#   del search
 
+#    time.sleep(15)
 
-# Update
+# Actualizar
 since_Id = since_Id2
 
 f = open('since_id.txt','w')
 for i in range(0,len(parties)):
     f.write( str(since_Id[i]) + '\n' )
 
-   
 f.close()
 
 
