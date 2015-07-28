@@ -23,7 +23,7 @@ df_tables <- fetch(seetables)
 dbClearResult(seetables)
 
 
-# Create table to store tweets if it doesn't exists
+# Create table to store tweets if it doesn't exist
 if ( sum(grepl( "tweets", df_tables[,1]))==0 ) {
  
 	q_tbltweets <- "CREATE TABLE `tweets` (`row_names` INT, `id` VARCHAR(18), `date` DATETIME NOT NULL,`name` VARCHAR(16), `text` VARCHAR(140) NOT NULL, `retweet` BIT, `reply_to` VARCHAR(18), `rt_count` SMALLINT)"
@@ -42,6 +42,13 @@ if ( sum( grepl( "mentions", df_tables[,1]) ) ==0 ) {
 	q_tblmentions <- "CREATE TABLE `mentions`(`row_names` INT, `time` DATETIME, `PP` INT, `PODEMOS` INT,`PSOE` INT, `CS` INT, `IU` INT, `UPYD` INT )"
 	dbSendQuery(con,q_tblmentions)
 	cat("Created \"mentions\" table","\n")
+}
+
+# Create table to store most frequent concepts if it doesn't exist
+if ( sum( grepl( "concepts", df_tables[,1]) ) ==0 ) {
+	q_tblconcepts <- "CREATE TABLE `concepts`(`row_names` INT , `date` DATE, `party` varchar(12), `concept` VARCHAR(20), `count` INT)"
+	dbSendQuery(con,q_tblconcepts)
+	cat("Created \"concepts\" table","\n")
 }
 
 # Directorio
