@@ -250,7 +250,7 @@ con <- dbConnect(MySQL(),
 		save( tmp , file = paste0("./data/frequent_",gsub("-","_",Sys.Date()-1),"_",parties[i],".RData") )
 
 		# Prepare and store the top concepts by party in the db
-		conceptos <- cbind( rep( as.character(Sys.Date()),20), rep(20,parties[i]), tmp[1:20,])
+		conceptos <- cbind( rep( as.character(Sys.Date()-1),20), rep(20,parties[i]), tmp[1:20,])
 		colnames(conceptos) <- c("date","party","concept", "count")
 		dbWriteTable( con, "concepts", conceptos, append=TRUE)
 
