@@ -249,9 +249,14 @@ con <- dbConnect(MySQL(),
 		assign( paste0("tf_", parties[i]), tmp )
 		save( tmp , file = paste0("./data/frequent_",gsub("-","_",Sys.Date()-1),"_",parties[i],".RData") )
 
+		# Prepare and store the top concepts by party in the db
+		conceptos <- cbind( rep( as.character(Sys.Date()),20), rep(20,parties[i]), tmp[1:20,])
+		colnames(conceptos) <- c("date","party","concept", "count")
+		dbWriteTable( con, "concepts", conceptos, append=TRUE)
+
 		cat("Doing wordclouds...","\n")
 		
-		# If too many mentions, take only the top 200:
+		# If too many mentions, take only some on the top:
 		if (dim(tmp)[1]>120) {
 			tmp2 = tmp[1:120,]
 		} else {
