@@ -329,7 +329,10 @@ con <- dbConnect(MySQL(),
 		colnames(top_retweeters) <- c("nombre","n. tweets")
 		top_retweeters[,1]<- factor(top_retweeters[,1],as.character(top_retweeters[,1]))		
 		top_retweeters[,3] <- factor("retweets"); colnames(top_retweeters)[3] <-"tipo"
-
+		
+		# Put both together
+		top <- rbind(top_origtweeters,top_retweeters)
+		
 		fecha <- format(Sys.Date()-1,format="%d de %B")
 	        if (substring(fecha,1,1)=="0") {
         		fecha <- substring(fecha,2)
