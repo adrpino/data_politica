@@ -517,8 +517,33 @@ con <- dbConnect(MySQL(),
 
 	col_parties <- dim(data_mentions)[2]
 
+	# Export data first day of the month
+	if ( as.numeric(format(Sys.Date(), "%d")) == 1 ) { 
+
+		# Last and first day of month 
+		last_month <- paste0(as.character(Sys.Date()-1), " 23:59:59")
+		first_month <- paste0(format(as.POSIXct(last_month),"%Y-%m"),"-01 00:00:00" )
+		txt_export_query <- paste0("SELECT FROM tweets WHERE date >= ", "'", first_month, "'", 
+		" AND date <= ", "'", last_month, "'" )
+		
+		cat("Getting last month's tweets...")
+  		export_query <- dbSendQuery(con, export_query)
+
+		# Data
+		data_month <- fetch(export_query,n=-1)
+		dbClearResult(export_query)
+		
+		cat("done","\n")
+		
+		index <- which(duplicated(data_month$id))
+		data_month <- data_month[-index,]
+		data_month$row_names <- NULL
+		
+		# Export data:
+		write.csv( data_month, file=paste0(path_to_export, format( as.POSIXct(last_month),"%B_%Y"),".csv") )
+  	}
   
-	# Erase older entries in the database:
+	# Erase older entries in the database: (arreglar!)
 	txtquery2 <- paste0("DELETE FROM tweets WHERE date < NOW() - INTERVAL ", db_window, " DAY")
 	cat("Borrando tweets antiguos...","\n")
 	rm_query <- dbSendQuery(con, txtquery2)
