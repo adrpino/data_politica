@@ -9,6 +9,7 @@ library("ggplot2")
 source("doInteractions.R")			# Interactions between mentions
 
 path <- "/path/to/directory/data"
+path_to_export <- "path/to/directory/export"
 
 parties <- c("PPopular","ahorapodemos","PSOE","ciudadanosCs","iunida","UPyD")
 parties_short <-c("PP","Podemos","PSOE","Cs","IU","UPyD")
@@ -538,10 +539,19 @@ con <- dbConnect(MySQL(),
 		index <- which(duplicated(data_month$id))
 		data_month <- data_month[-index,]
 		data_month$row_names <- NULL
+		data_month$rt_count <- NULL
+		
+		filemonth <- format( as.POSIXct(last_month),"%B_%Y") 
 		
 		# Export data:
-		write.csv( data_month, file=paste0(path_to_export, format( as.POSIXct(last_month),"%B_%Y"),".csv") )
-  	}
+		write.csv( data_month, file=paste0(path_to_export, filemonth, ".csv" )
+		
+		# Compress
+		system( paste0("gzip -c ", path_to_export, filemonth, ".csv" , " > " , path_to_export, filemonth, ".gz") )
+	
+		# Remove uncompressed
+		system( paste0("rm " path_to_export, filemonth, ".csv") )
+	}
   
 	# Erase older entries in the database: (arreglar!)
 	txtquery2 <- paste0("DELETE FROM tweets WHERE date < NOW() - INTERVAL ", db_window, " DAY")
