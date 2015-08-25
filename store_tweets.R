@@ -51,14 +51,18 @@ if ( sum( grepl( "concepts", df_tables[,1]) ) ==0 ) {
 	cat("Created \"concepts\" table","\n")
 }
 
-# Directorio
+# Directorio gráficos y demás
 path <- "/path/to/directory"
 
 if (!file.exists("data")) {
-
 	dir.create("data")
-
 }
+
+# Directorio donde se exportan los datos
+if (!file.exists("export")) {
+	dir.create("export")
+}
+
 
 
 my_stopwords <- c("a","ante","bajo","con","contra","de","desde","en","entre",
