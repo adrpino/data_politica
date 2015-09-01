@@ -545,7 +545,8 @@ con <- dbConnect(MySQL(),
 		filemonth <- format( as.POSIXct(last_month),"%B_%Y") 
 		
 		# Export data:
-		write.csv( data_month, file=paste0(path_to_export, filemonth, ".csv" )
+		write.table( data_month, file=paste0(path_to_export, filemonth, ".csv" ),
+			sep=",",row.names=FALSE,col.names=TRUE,fileEncoding="UTF-8")
 		
 		# Compress
 		system( paste0("gzip -c ", path_to_export, filemonth, ".csv" , " > " , path_to_export, filemonth, ".gz") )
