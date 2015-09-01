@@ -525,7 +525,7 @@ con <- dbConnect(MySQL(),
 		last_month <- paste0(as.character(Sys.Date()-1), " 23:59:59")
 		first_month <- paste0(format(as.POSIXct(last_month),"%Y-%m"),"-01 00:00:00" )
 
-		txt_export_query <- paste0("SELECT FROM tweets WHERE date >= ", "'", first_month, "'", 
+		txt_export_query <- paste0("SELECT * FROM tweets WHERE date >= ", "'", first_month, "'", 
 		" AND date <= ", "'", last_month, "'" )
 		
 		cat("Getting last month's tweets...")
