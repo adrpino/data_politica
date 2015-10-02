@@ -21,13 +21,20 @@ api = tweepy.API(auth, wait_on_rate_limit=True)
 # Nombres de los partidos
 parties = ["@PPopular","@ahorapodemos","@PSOE","@ciudadanosCs","@iunida","@UPyD"]
 
+parties_leader = ["@PPopular OR @marianorajoy",
+"@ahorapodemos OR @Pablo_Iglesias",
+"@PSOE OR @sanchezcastejon",
+"@ciudadanosCs OR @Albert_Rivera", 
+"@iunida OR @agarzon", 
+"@UPyD OR @Herzogoff"]
+
 #TODO para hacer búsquedas más generales en el futuro
-parties_key = ["@PPopular OR \"Partido Popular\"",
-"@ahorapodemos OR \"Podemos\"",
-"@PSOE OR \"Partido Socialista\"",
-"@ciudadanosCs OR \"Ciudadanos\"", 
-"@iunida OR \"Izquierda Unida\"", 
-"@UPyD OR '\"Union Progreso y Democracia\" "]
+#parties_key = ["@PPopular OR \"Partido Popular\"",
+#"@ahorapodemos OR \"Podemos\"",
+#"@PSOE OR \"Partido Socialista\"",
+#"@ciudadanosCs OR \"Ciudadanos\"", 
+#"@iunida OR \"Izquierda Unida\"", 
+#"@UPyD OR '\"Union Progreso y Democracia\" "]
 
 # Array que almacena ids de los últimos tweets
 since_Id=[]
@@ -53,7 +60,7 @@ since_Id2=[]    # if
 n_tweets= 50
 
 # Loopear por todos los partidos
-for ind, item in enumerate(parties):
+for ind, item in enumerate(parties_leader):
 #    search = api.search(item, count=n_tweets,since_id =since_Id[ind] )
     search = api.search(item, count=n_tweets)    
     new_Id=[]
