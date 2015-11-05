@@ -287,6 +287,17 @@ con <- dbConnect(MySQL(),
    
 	}    # loop parties
 
+    # See what are the top concepts parties are talking about
+    # Erase previous file
+    unlink("status_concepts_top")
+    for (i in 1:length(parties)) {
+        concepts <- get(paste0("tf_", parties[i]))
+        status_concepts_top <- paste( paste0("Conceptos asociados a", parties_long[i],", ",fecha,":" ), 
+            	paste0(concepts[1:3,1],collapse=" ") )
+	    path_status_concepts_top <- paste0(path,"/status_concepts_top")
+	    write.table( path_status_top, file="status_concepts_top", 
+	        row.names=F,col.names=F,append=TRUE, eol="\n", quote=F)
+    }
 	
 	# Sum unique tweets by parties:
 	unique <- vector(mode="numeric")
