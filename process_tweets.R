@@ -545,14 +545,19 @@ con <- dbConnect(MySQL(),
 		filemonth <- format( as.POSIXct(last_month),"%B_%Y") 
 		
 		# Export data:
-		write.table( data_month, file=paste0(path_to_export, filemonth, ".csv" ),
-			sep=",",row.names=FALSE,col.names=TRUE,fileEncoding="UTF-8")
+		save(data_month, file=paste0(path_to_export,filemonth,".RData")
+		
+		# Remove data
+		rm(data_month)
+		
+#		write.table( data_month, file=paste0(path_to_export, filemonth, ".csv" ),
+#			sep=",",row.names=FALSE,col.names=TRUE,fileEncoding="UTF-8")
 		
 		# Compress
-		system( paste0("gzip -c ", path_to_export, filemonth, ".csv" , " > " , path_to_export, filemonth, ".gz") )
+#		system( paste0("gzip -c ", path_to_export, filemonth, ".csv" , " > " , path_to_export, filemonth, ".gz") )
 	
 		# Remove uncompressed
-		system( paste0("rm " path_to_export, filemonth, ".csv") )
+#		system( paste0("rm " path_to_export, filemonth, ".csv") )
 	}
   
 	# Erase older entries in the database: (arreglar!)
