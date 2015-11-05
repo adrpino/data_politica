@@ -295,7 +295,7 @@ con <- dbConnect(MySQL(),
         status_concepts_top <- paste( paste0("Conceptos asociados a", parties_long[i],", ",fecha,":" ), 
             	paste0(concepts[1:3,1],collapse=" ") )
 	    path_status_concepts_top <- paste0(path,"/status_concepts_top")
-	    write.table( path_status_top, file="status_concepts_top", 
+	    write.table( path_status_concepts_top, file="status_concepts_top", 
 	        row.names=F,col.names=F,append=TRUE, eol="\n", quote=F)
     }
 	
