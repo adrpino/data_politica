@@ -7,7 +7,7 @@ Consiste en dos procesos:
 
 - Ciudadanos: **@CiudadanosCs** y **@Albert_Rivera**
 - IU: **@iunida** y **@agarzon**
-- Podemos: **@ahorapodemos** y **@Pablo_Iglesias**
+- Podemos: **@ahorapodemos** y **@Pablo_Iglesias_**
 - PP: **@PPopular** y **@marianorajoy**
 - PSOE: **@PSOE** y **@sanchezcastejon**
 - UPyD: **@UPyD** y **@Herzogoff**
