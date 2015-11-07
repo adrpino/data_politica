@@ -296,8 +296,8 @@ con <- dbConnect(MySQL(),
     unlink("status_concepts_top")
     for (i in 1:length(parties)) {
         concepts <- get(paste0("tf_", parties[i]))
-        status_concepts_top <- paste( paste0("Conceptos asociados a", parties_long[i],", ",fecha,":" ), 
-            	paste0(concepts[1:3,1],collapse=" ") )
+        status_concepts_top <- paste( paste0("Conceptos asoc. a", parties_long[i],", ",fecha,":" ), 
+            	paste0(concepts[1:3,1],collapse=", ") )
 	    path_status_concepts_top <- "status_concepts_top"
 	    write.table( status_concepts_top, file=path_status_concepts_top, 
 	        row.names=F,col.names=F,append=TRUE, eol="\n", quote=F)
