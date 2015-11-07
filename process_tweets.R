@@ -84,8 +84,6 @@ con <- dbConnect(MySQL(),
 		txtquery = paste0("SELECT * FROM tweets WHERE date >= ", "'", 
         		as.POSIXct(time1), "'", " AND date <= ", "'", as.POSIXct(time2) , "'" )
 	
-		cat(paste0("Querying for tweets between ", as.POSIXct(time1), " and ",as.POSIXct(time2)),"\n")
-	
 		query <- dbSendQuery(con, txtquery ) 
 		data <- fetch(query,n=-1)
 		dbClearResult(query)
@@ -103,7 +101,9 @@ con <- dbConnect(MySQL(),
 				data=data[-index,]
 			}
 		
-	        	cat(paste0("Tweets: ", dim(data)[1], " duplicated: ",length(index)),"\n")
+	        	cat( paste0("Tweets betw: ",as.POSIXct(time1), 
+	        		" and ",as.POSIXct(time2), dim(data)[1] ,
+	        		" , dupl: ",length(index)) , "\n" )
 
 			# Loop sobre partidos
 			for (ind in 1:length(parties)) {
@@ -211,7 +211,6 @@ con <- dbConnect(MySQL(),
 			 mentions[data_iter,] <- 0
 		}
 	
-		cat(paste0("Iteration ", data_iter, " in the db"),"\n")
 
     	# Take indicator of time the lower bound of the interval:
     	time_vec[data_iter] <- as.character(time1)
