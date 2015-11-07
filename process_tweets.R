@@ -286,6 +286,11 @@ con <- dbConnect(MySQL(),
    
 	}    # loop parties
 
+	fecha <- format(Sys.Date()-1,format="%d de %B")
+        if (substring(fecha,1,1)=="0") {
+       		fecha <- substring(fecha,2)
+	}
+
     # See what are the top concepts parties are talking about
     # Erase previous file
     unlink("status_concepts_top")
@@ -344,10 +349,7 @@ con <- dbConnect(MySQL(),
 		# Put both together
 		top <- rbind(top_origtweeters,top_retweeters)
 		
-		fecha <- format(Sys.Date()-1,format="%d de %B")
-	        if (substring(fecha,1,1)=="0") {
-        		fecha <- substring(fecha,2)
-		}
+
 
 		status_top <- paste( paste0(parties_hash[i],", ",fecha,":" ), 
 			paste0("@",top_tweeters[1:3,1],collapse=" ") )
