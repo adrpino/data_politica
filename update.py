@@ -67,12 +67,12 @@ status_mean = "Promedio tweets por usuario: " + date_ystday + " #DataPolitica_me
 status_week = "Resumen de la semana política en twitter #DataPolitica_semana"
 
 # Statuses of top concepts
-status_concepts_top_pp      = status_concepts_top[0:len(status_concepts_top[0])-1]
-status_concepts_top_podemos = status_concepts_top[1:len(status_concepts_top[1])-1]
-status_concepts_top_psoe    = status_concepts_top[2:len(status_concepts_top[2])-1]
-status_concepts_top_cs      = status_concepts_top[3:len(status_concepts_top[3])-1]
-status_concepts_top_iu      = status_concepts_top[4:len(status_concepts_top[4])-1]
-status_concepts_top_upyd    = status_concepts_top[5:len(status_concepts_top[5])-1]
+status_concepts_top_pp      = status_concepts_top[0][0:len(status_concepts_top[0])-1]
+status_concepts_top_podemos = status_concepts_top[1][1:len(status_concepts_top[1])-1]
+status_concepts_top_psoe    = status_concepts_top[2][2:len(status_concepts_top[2])-1]
+status_concepts_top_cs      = status_concepts_top[3][3:len(status_concepts_top[3])-1]
+status_concepts_top_iu      = status_concepts_top[4][4:len(status_concepts_top[4])-1]
+status_concepts_top_upyd    = status_concepts_top[5][5:len(status_concepts_top[5])-1]
 
 # Paths to status
 status_top_pp      = status_top[0][0:len(status_top[0])-1]
@@ -87,25 +87,25 @@ status_inter = "Interacciones entre tweets: " + date_ystday + " #DataPolitica_In
 
 # Update
 # Wordclouds
-api.update_with_media(path_wc_pp       , status = status_concepts_top_pp)
-api.update_with_media(path_wc_podemos  , status = status_concepts_top_podemos)
-api.update_with_media(path_wc_psoe     , status = status_concepts_top_psoe)
-api.update_with_media(path_wc_cs       , status = status_concepts_top_cs)
-api.update_with_media(path_wc_iu       , status = status_concepts_top_iu)
-api.update_with_media(path_wc_upyd     , status = status_concepts_top_upyd)
+api.update_with_media(path_wc_pp       , status = status_concepts_top_pp      )
+api.update_with_media(path_wc_podemos  , status = status_concepts_top_podemos )
+api.update_with_media(path_wc_psoe     , status = status_concepts_top_psoe    )
+api.update_with_media(path_wc_cs       , status = status_concepts_top_cs      )
+api.update_with_media(path_wc_iu       , status = status_concepts_top_iu      )
+api.update_with_media(path_wc_upyd     , status = status_concepts_top_upyd    )
 
 # Top tweeters
-api.update_with_media(path_top_pp      , status = status_top_pp)
-api.update_with_media(path_top_podemos , status = status_top_podemos)
-api.update_with_media(path_top_psoe    , status = status_top_psoe)
-api.update_with_media(path_top_cs      , status = status_top_cs)
-api.update_with_media(path_top_iu      , status = status_top_iu)
-api.update_with_media(path_top_upyd    , status = status_top_upyd)
+api.update_with_media(path_top_pp      , status = status_top_pp      )
+api.update_with_media(path_top_podemos , status = status_top_podemos )
+api.update_with_media(path_top_psoe    , status = status_top_psoe    )
+api.update_with_media(path_top_cs      , status = status_top_cs      )
+api.update_with_media(path_top_iu      , status = status_top_iu      )
+api.update_with_media(path_top_upyd    , status = status_top_upyd    )
 
-api.update_with_media(path_mean , status = status_mean )
-api.update_with_media(path_all  , status = status_all  )
-api.update_with_media(path_time , status = status_time )
-api.update_with_media(path_inter, status = status_inter)
+api.update_with_media(path_mean , status = status_mean  )
+api.update_with_media(path_all  , status = status_all   )
+api.update_with_media(path_time , status = status_time  )
+api.update_with_media(path_inter, status = status_inter )
 
 if len(paths)==17:
     api.update_with_media(path_week, status = status_week)
